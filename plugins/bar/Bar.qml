@@ -7,7 +7,9 @@ Item {
     id: root
 
     property var layout: ({
-        left: [],
+        left: [
+            { id: "workspace" },
+        ],
         center: [],
         right: [
             { id: "volume" },
@@ -23,6 +25,7 @@ Item {
 
     // Stand-in for BarWidgetRegistry.widgets[id].component.
     function moduleFor(id) {
+        if (id === "workspace") return workspaceComponent
         if (id === "volume") return volumeComponent
         if (id === "brightness") return brightnessComponent
         if (id === "network") return networkComponent
@@ -33,6 +36,8 @@ Item {
         if (id === "desktop") return desktopComponent
         return null
     }
+
+    Component { id: workspaceComponent; Workspace {} }
 
     Component { id: volumeComponent; Volume {} }
     Component { id: brightnessComponent; Brightness {} }
@@ -64,12 +69,11 @@ Item {
                 anchors.leftMargin: 8
                 anchors.rightMargin: 8
 
-                Text {
-                    text: "workspaces"
-                    color: "#cdd6f4"
-                    font.family: "Iosevka Nerd Font"
-                    font.pixelSize: 16
+                Loader {
+                    sourceComponent: workspaceComponent
+                    onLoaded: item.outputName = modelData.name
                 }
+
 
                 Item { Layout.fillWidth: true }
 
