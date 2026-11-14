@@ -9,7 +9,9 @@ Item {
         left: [
             { id: "workspace" },
         ],
-        center: [],
+        center: [
+            { id: "clock" },
+        ],
         right: [
             { id: "volume" },
             { id: "brightness" },
@@ -25,6 +27,7 @@ Item {
     // Stand-in for BarWidgetRegistry.widgets[id].component.
     function moduleFor(id) {
         if (id === "workspace") return workspaceComponent
+        if (id === "clock") return clockComponent
         if (id === "volume") return volumeComponent
         if (id === "brightness") return brightnessComponent
         if (id === "network") return networkComponent
@@ -37,6 +40,7 @@ Item {
     }
 
     Component { id: workspaceComponent; Workspace {} }
+    Component { id: clockComponent; Clock {} }
 
     Component { id: volumeComponent; Volume {} }
     Component { id: brightnessComponent; Brightness {} }
@@ -52,6 +56,7 @@ Item {
 
         PanelWindow {
             required property var modelData
+            readonly property string screenOutput: modelData.name
             screen: modelData
 
             anchors {
@@ -68,21 +73,34 @@ Item {
                 anchors.leftMargin: 8
                 anchors.rightMargin: 8
 
-                Loader {
+                Row {
                     anchors.left: parent.left
                     anchors.verticalCenter: parent.verticalCenter
-                    sourceComponent: workspaceComponent
-                    onLoaded: item.outputName = modelData.name
+                    spacing: 14
+                    Repeater {
+                        model: root.layout.left
+                        delegate: Loader {
+                            required property var modelData
+                            sourceComponent: root.moduleFor(modelData.id)
+                            onLoaded: if (item && "outputName" in item) item.outputName = screenOutput
+                        }
+                    }
                 }
 
-                Text {
+                Row {
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter
-                    text: Qt.formatDateTime(clock.date, "ddd HH:mm")
-                    color: "#cdd6f4"
-                    font.family: "Iosevka Nerd Font"
-                    font.pixelSize: 16
+                    spacing: 14
+                    Repeater {
+                        model: root.layout.center
+                        delegate: Loader {
+                            required property var modelData
+                            sourceComponent: root.moduleFor(modelData.id)
+                            onLoaded: if (item && "outputName" in item) item.outputName = screenOutput
+                        }
+                    }
                 }
+
 
                 Row {
                     anchors.right: parent.right
