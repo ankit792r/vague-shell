@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
@@ -10,11 +11,17 @@ Item {
     property int cpu: 0
     property int memUsedKb: 0
     property int memTotalKb: 1
+    property int swapUsedKb: 0
+    property int swapTotalKb: 0
+    property int taskCount: 0
+    property int threadCount: 0
+    property string load: "0.00  0.00  0.00"
+    property string uptime: "0m"
     property var cores: []
-    property var processes: []
     property var lastCpu: null
 
     readonly property int memPercent: memTotalKb > 0 ? Math.round(memUsedKb * 100 / memTotalKb) : 0
+    readonly property int swapPercent: swapTotalKb > 0 ? Math.round(swapUsedKb * 100 / swapTotalKb) : 0
 
     implicitWidth: row.implicitWidth
     implicitHeight: 32
@@ -64,29 +71,48 @@ Item {
     function parseMem(raw) {
         var total = 0
         var available = 0
+        var swapTotal = 0
+        var swapFree = 0
         var lines = String(raw || "").split("\n")
         for (var i = 0; i < lines.length; i++) {
-            if (lines[i].indexOf("MemTotal:") === 0) total = parseInt(lines[i].replace(/[^0-9]/g, ""), 10) || 0
-            if (lines[i].indexOf("MemAvailable:") === 0) available = parseInt(lines[i].replace(/[^0-9]/g, ""), 10) || 0
+            var value = parseInt(lines[i].replace(/[^0-9]/g, ""), 10) || 0
+            if (lines[i].indexOf("MemTotal:") === 0) total = value
+            else if (lines[i].indexOf("MemAvailable:") === 0) available = value
+            else if (lines[i].indexOf("SwapTotal:") === 0) swapTotal = value
+            else if (lines[i].indexOf("SwapFree:") === 0) swapFree = value
         }
         memTotalKb = total
         memUsedKb = Math.max(0, total - available)
+        swapTotalKb = swapTotal
+        swapUsedKb = Math.max(0, swapTotal - swapFree)
     }
 
-    function parseProcesses(raw) {
+    function parseLoad(raw) {
+        var parts = String(raw || "").trim().split(/\s+/)
+        load = parts.slice(0, 3).join("  ") || "0.00  0.00  0.00"
+    }
+
+    function parseUptime(raw) {
+        var seconds = Math.floor(parseFloat(String(raw || "").split(/\s+/)[0]) || 0)
+        var days = Math.floor(seconds / 86400)
+        seconds %= 86400
+        var hours = Math.floor(seconds / 3600)
+        seconds %= 3600
+        var minutes = Math.floor(seconds / 60)
+        uptime = (days > 0 ? days + "d " : "") + hours + "h " + minutes + "m"
+    }
+
+    function parseTasks(raw) {
         var lines = String(raw || "").trim().split("\n")
-        var rows = []
-        for (var i = 0; i < lines.length && rows.length < 16; i++) {
-            var fields = lines[i].trim().split(/\s+/)
-            if (fields.length < 4) continue
-            rows.push({
-                pid: fields[0],
-                cpu: fields[1],
-                mem: fields[2],
-                command: fields.slice(3).join(" ")
-            })
+        var tasks = 0
+        var threads = 0
+        for (var i = 0; i < lines.length; i++) {
+            if (!lines[i]) continue
+            tasks++
+            threads += parseInt(lines[i], 10) || 0
         }
-        processes = rows
+        taskCount = tasks
+        threadCount = threads
     }
 
     Process {
@@ -104,9 +130,27 @@ Item {
     }
 
     Process {
-        id: processRead
-        command: ["ps", "-eo", "pid,pcpu,pmem,comm", "--sort=-pcpu", "--no-headers"]
-        stdout: StdioCollector { onStreamFinished: root.parseProcesses(text) }
+        id: loadRead
+        command: ["cat", "/proc/loadavg"]
+        stdout: StdioCollector { onStreamFinished: root.parseLoad(text) }
+    }
+
+    Process {
+        id: uptimeRead
+        command: ["cat", "/proc/uptime"]
+        stdout: StdioCollector { onStreamFinished: root.parseUptime(text) }
+    }
+
+    Process {
+        id: taskRead
+        command: ["ps", "-eo", "nlwp", "--no-headers"]
+        stdout: StdioCollector { onStreamFinished: root.parseTasks(text) }
+    }
+
+    function refreshPanel() {
+        loadRead.running = true
+        uptimeRead.running = true
+        taskRead.running = true
     }
 
     Timer {
@@ -117,11 +161,11 @@ Item {
         onTriggered: {
             cpuRead.running = true
             memRead.running = true
-            if (root.opened) processRead.running = true
+            if (root.opened) root.refreshPanel()
         }
     }
 
-    onOpenedChanged: if (opened) processRead.running = true
+    onOpenedChanged: if (opened) refreshPanel()
 
     Row {
         id: row
@@ -240,7 +284,7 @@ Item {
                             text: "System"
                             color: "#cdd6f4"
                             font.family: "Iosevka Nerd Font"
-                            font.pixelSize: 16
+                            font.pixelSize: 18
                             font.bold: true
                         }
 
@@ -256,7 +300,7 @@ Item {
                                     text: "CPU"
                                     color: "#7f849c"
                                     font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 11
+                                    font.pixelSize: 14
                                     font.bold: true
                                     font.letterSpacing: 1.2
                                 }
@@ -266,13 +310,13 @@ Item {
                                     text: root.cpu + "%"
                                     color: "#cdd6f4"
                                     font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 13
+                                    font.pixelSize: 14
                                 }
                             }
 
                             Rectangle {
                                 width: parent.width
-                                height: 6
+                                height: 8
                                 color: "#313244"
                                 Rectangle {
                                     width: parent.width * root.cpu / 100
@@ -280,29 +324,11 @@ Item {
                                     color: "#cdd6f4"
                                 }
                             }
+                        }
 
-                            Flow {
-                                width: parent.width
-                                spacing: 4
-
-                                Repeater {
-                                    model: root.cores
-
-                                    Rectangle {
-                                        required property int modelData
-                                        required property int index
-                                        width: (parent.width - 4 * 7) / 8
-                                        height: 10
-                                        color: "#313244"
-
-                                        Rectangle {
-                                            width: parent.width * modelData / 100
-                                            height: parent.height
-                                            color: "#89b4fa"
-                                        }
-                                    }
-                                }
-                            }
+                        Column {
+                            width: parent.width
+                            spacing: 8
 
                             Item {
                                 width: parent.width
@@ -312,7 +338,7 @@ Item {
                                     text: "MEM"
                                     color: "#7f849c"
                                     font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 11
+                                    font.pixelSize: 14
                                     font.bold: true
                                     font.letterSpacing: 1.2
                                 }
@@ -322,13 +348,13 @@ Item {
                                     text: root.formatGb(root.memUsedKb) + " / " + root.formatGb(root.memTotalKb)
                                     color: "#cdd6f4"
                                     font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 13
+                                    font.pixelSize: 14
                                 }
                             }
 
                             Rectangle {
                                 width: parent.width
-                                height: 6
+                                height: 8
                                 color: "#313244"
                                 Rectangle {
                                     width: parent.width * root.memPercent / 100
@@ -336,42 +362,57 @@ Item {
                                     color: "#a6e3a1"
                                 }
                             }
-                        }
 
-                        Row {
-                            width: parent.width
-                            spacing: 8
+                            Item {
+                                width: parent.width
+                                height: 16
 
-                            Text { width: 56; text: "PID"; color: "#7f849c"; font.family: "Iosevka Nerd Font"; font.pixelSize: 11; font.bold: true }
-                            Text { width: 48; text: "CPU"; color: "#7f849c"; font.family: "Iosevka Nerd Font"; font.pixelSize: 11; font.bold: true }
-                            Text { width: 48; text: "MEM"; color: "#7f849c"; font.family: "Iosevka Nerd Font"; font.pixelSize: 11; font.bold: true }
-                            Text { text: "COMMAND"; color: "#7f849c"; font.family: "Iosevka Nerd Font"; font.pixelSize: 11; font.bold: true }
-                        }
-
-                        ListView {
-                            width: parent.width
-                            height: Math.min(contentHeight, 280)
-                            clip: true
-                            model: root.processes
-
-                            delegate: Row {
-                                required property var modelData
-                                width: ListView.view.width
-                                height: 20
-                                spacing: 8
-
-                                Text { width: 56; text: modelData.pid; color: "#a6adc8"; font.family: "Iosevka Nerd Font"; font.pixelSize: 12 }
-                                Text { width: 48; text: modelData.cpu; color: "#cdd6f4"; font.family: "Iosevka Nerd Font"; font.pixelSize: 12 }
-                                Text { width: 48; text: modelData.mem; color: "#cdd6f4"; font.family: "Iosevka Nerd Font"; font.pixelSize: 12 }
                                 Text {
-                                    width: parent.width - 56 - 48 - 48 - 24
-                                    text: modelData.command
+                                    text: "SWAP"
+                                    color: "#7f849c"
+                                    font.family: "Iosevka Nerd Font"
+                                    font.pixelSize: 14
+                                    font.bold: true
+                                    font.letterSpacing: 1.2
+                                }
+
+                                Text {
+                                    anchors.right: parent.right
+                                    text: root.swapTotalKb > 0
+                                        ? root.formatGb(root.swapUsedKb) + " / " + root.formatGb(root.swapTotalKb)
+                                        : "none"
                                     color: "#cdd6f4"
                                     font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 12
-                                    elide: Text.ElideRight
+                                    font.pixelSize: 14
                                 }
                             }
+
+                            Rectangle {
+                                width: parent.width
+                                height: 8
+                                color: "#313244"
+                                Rectangle {
+                                    width: parent.width * root.swapPercent / 100
+                                    height: parent.height
+                                    color: "#f9e2af"
+                                }
+                            }
+                        }
+
+                        GridLayout {
+                            width: parent.width
+                            columns: 2
+                            columnSpacing: 16
+                            rowSpacing: 6
+
+                            Text { text: "TASKS"; color: "#7f849c"; font.family: "Iosevka Nerd Font"; font.pixelSize: 14; font.bold: true; font.letterSpacing: 1.2 }
+                            Text { text: root.taskCount; color: "#cdd6f4"; font.family: "Iosevka Nerd Font"; font.pixelSize: 14; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
+                            Text { text: "THREADS"; color: "#7f849c"; font.family: "Iosevka Nerd Font"; font.pixelSize: 14; font.bold: true; font.letterSpacing: 1.2 }
+                            Text { text: root.threadCount; color: "#cdd6f4"; font.family: "Iosevka Nerd Font"; font.pixelSize: 14; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
+                            Text { text: "LOAD"; color: "#7f849c"; font.family: "Iosevka Nerd Font"; font.pixelSize: 14; font.bold: true; font.letterSpacing: 1.2 }
+                            Text { text: root.load; color: "#cdd6f4"; font.family: "Iosevka Nerd Font"; font.pixelSize: 14; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
+                            Text { text: "UPTIME"; color: "#7f849c"; font.family: "Iosevka Nerd Font"; font.pixelSize: 14; font.bold: true; font.letterSpacing: 1.2 }
+                            Text { text: root.uptime; color: "#cdd6f4"; font.family: "Iosevka Nerd Font"; font.pixelSize: 14; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
                         }
                     }
                 }
