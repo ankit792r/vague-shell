@@ -1,0 +1,20 @@
+import QtQuick
+import Quickshell
+import "plugins/bar"
+
+ShellRoot {
+    id: shell
+
+    readonly property string defaultBarId: "shell.bar"
+    property string activeBarId: defaultBarId
+
+    Component {
+        id: defaultBarComponent
+        Bar {}
+    }
+
+    Loader {
+        active: shell.activeBarId === shell.defaultBarId
+        sourceComponent: defaultBarComponent
+    }
+}
