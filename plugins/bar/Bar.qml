@@ -10,17 +10,17 @@ Item {
         left: [],
         center: [],
         right: [
-            { id: "volume" },
+            { id: "monitor" },
             { id: "network" },
             { id: "bluetooth" },
             { id: "battery" },
-            { id: "tray" }
+            { id: "tray" },
         ]
     })
 
     // Stand-in for BarWidgetRegistry.widgets[id].component.
     function moduleFor(id) {
-        if (id === "volume") return volumeComponent
+        if (id === "monitor") return monitorComponent
         if (id === "network") return networkComponent
         if (id === "bluetooth") return bluetoothComponent
         if (id === "battery") return batteryComponent
@@ -28,7 +28,7 @@ Item {
         return null
     }
 
-    Component { id: volumeComponent; Volume {} }
+    Component { id: monitorComponent; Monitor {} }
     Component { id: networkComponent; Network {} }
     Component { id: bluetoothComponent; Bluetooth {} }
     Component { id: batteryComponent; Battery {} }
