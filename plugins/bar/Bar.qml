@@ -13,6 +13,7 @@ Item {
             { id: "monitor" },
             { id: "network" },
             { id: "bluetooth" },
+            { id: "system" },
             { id: "battery" },
             { id: "tray" },
         ]
@@ -24,6 +25,7 @@ Item {
         if (id === "network") return networkComponent
         if (id === "bluetooth") return bluetoothComponent
         if (id === "battery") return batteryComponent
+        if (id === "system") return systemComponent
         if (id === "tray") return trayComponent
         return null
     }
@@ -32,6 +34,7 @@ Item {
     Component { id: networkComponent; Network {} }
     Component { id: bluetoothComponent; Bluetooth {} }
     Component { id: batteryComponent; Battery {} }
+    Component { id: systemComponent; System {} }
     Component { id: trayComponent; Tray {} }
 
     Variants {
