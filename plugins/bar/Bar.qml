@@ -1,5 +1,4 @@
 import QtQuick
-import QtQuick.Layouts
 import Quickshell
 import "modules"
 
@@ -64,29 +63,30 @@ Item {
             implicitHeight: 32
             color: "#1e1e2e"
 
-            RowLayout {
+            Item {
                 anchors.fill: parent
                 anchors.leftMargin: 8
                 anchors.rightMargin: 8
 
                 Loader {
+                    anchors.left: parent.left
+                    anchors.verticalCenter: parent.verticalCenter
                     sourceComponent: workspaceComponent
                     onLoaded: item.outputName = modelData.name
                 }
 
-
-                Item { Layout.fillWidth: true }
-
                 Text {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
                     text: Qt.formatDateTime(clock.date, "ddd HH:mm")
                     color: "#cdd6f4"
                     font.family: "Iosevka Nerd Font"
                     font.pixelSize: 16
                 }
 
-                Item { Layout.fillWidth: true }
-
                 Row {
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
                     spacing: 14
 
                     Repeater {
