@@ -53,7 +53,7 @@ Item {
     Row {
         id: row
         anchors.verticalCenter: parent.verticalCenter
-        spacing: 6
+        spacing: 4
 
         Text {
             anchors.verticalCenter: parent.verticalCenter

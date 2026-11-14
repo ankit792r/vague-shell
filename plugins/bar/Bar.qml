@@ -17,6 +17,7 @@ Item {
             { id: "system" },
             { id: "battery" },
             { id: "tray" },
+            { id: "desktop" },
         ]
     })
 
@@ -29,6 +30,7 @@ Item {
         if (id === "battery") return batteryComponent
         if (id === "system") return systemComponent
         if (id === "tray") return trayComponent
+        if (id === "desktop") return desktopComponent
         return null
     }
 
@@ -39,6 +41,7 @@ Item {
     Component { id: batteryComponent; Battery {} }
     Component { id: systemComponent; System {} }
     Component { id: trayComponent; Tray {} }
+    Component { id: desktopComponent; Desktop {} }
 
     Variants {
         model: Quickshell.screens
