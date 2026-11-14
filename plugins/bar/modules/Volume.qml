@@ -28,11 +28,11 @@ Item {
     Row {
         id: row
         anchors.verticalCenter: parent.verticalCenter
-        spacing: 4
+        spacing: 6
 
         Text {
             anchors.verticalCenter: parent.verticalCenter
-            text: root.glyph()
+            text: "󰓃"
             color: "#cdd6f4"
             font.family: "Iosevka Nerd Font"
             font.pixelSize: 16
