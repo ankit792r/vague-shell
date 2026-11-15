@@ -133,8 +133,8 @@ Item {
 
                 delegate: Rectangle {
                     required property var modelData
-                    width: 20
-                    height: 20
+                    width: 22
+                    height: 22
                     color: modelData.is_active ? "#cdd6f4" : "transparent"
                     border.color: modelData.is_active ? "#cdd6f4" : "#45475a"
                     border.width: 1
@@ -144,7 +144,7 @@ Item {
                         text: modelData.name || modelData.idx
                         color: modelData.is_urgent ? "#f38ba8" : (modelData.is_active ? "#1e1e2e" : "#cdd6f4")
                         font.family: "Iosevka Nerd Font"
-                        font.pixelSize: 14
+                        font.pixelSize: 16
                     }
 
                     MouseArea {
