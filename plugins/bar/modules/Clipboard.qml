@@ -1,11 +1,12 @@
 import QtQuick
 import Quickshell
+import "../../../Commons"
 
 Item {
     id: root
 
     implicitWidth: icon.width
-    implicitHeight: 32
+    implicitHeight: Style.bar.height
 
     Text {
         id: icon
@@ -13,9 +14,9 @@ Item {
         width: Math.max(implicitWidth, 18)
         height: 32
         text: "󰅇"
-        color: "#cdd6f4"
-        font.family: "Iosevka Nerd Font"
-        font.pixelSize: 16
+        color: Color.text
+        font.family: Style.font.family
+        font.pixelSize: Style.font.heading
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
     }

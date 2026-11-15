@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import "modules"
+import "../../Commons"
 
 Item {
     id: root
@@ -21,7 +22,7 @@ Item {
             { id: "system" },
             { id: "battery" },
             { id: "tray" },
-            { id: "clipboard" },
+            // { id: "clipboard" },
             { id: "desktop" },
         ]
     })
@@ -38,7 +39,7 @@ Item {
         if (id === "battery") return batteryComponent
         if (id === "system") return systemComponent
         if (id === "tray") return trayComponent
-        if (id === "clipboard") return clipboardComponent
+        // if (id === "clipboard") return clipboardComponent
         if (id === "desktop") return desktopComponent
         return null
     }
@@ -54,7 +55,7 @@ Item {
     Component { id: batteryComponent; Battery {} }
     Component { id: systemComponent; System {} }
     Component { id: trayComponent; Tray {} }
-    Component { id: clipboardComponent; Clipboard {} }
+    // Component { id: clipboardComponent; Clipboard {} }
     Component { id: desktopComponent; Desktop {} }
 
     Variants {
@@ -71,8 +72,8 @@ Item {
                 right: true
             }
 
-            implicitHeight: 32
-            color: "#1e1e2e"
+            implicitHeight: Style.bar.height
+            color: Color.background
 
             Item {
                 anchors.fill: parent

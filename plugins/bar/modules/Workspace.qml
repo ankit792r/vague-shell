@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import "../../../Commons"
 
 Item {
     id: root
@@ -31,7 +32,7 @@ Item {
     }
 
     implicitWidth: row.implicitWidth
-    implicitHeight: 32
+    implicitHeight: Style.bar.height
 
     function take(line) {
         var event
@@ -135,16 +136,16 @@ Item {
                     required property var modelData
                     width: 22
                     height: 22
-                    color: modelData.is_active ? "#cdd6f4" : "transparent"
-                    border.color: modelData.is_active ? "#cdd6f4" : "#45475a"
+                    color: modelData.is_active ? Color.text : "transparent"
+                    border.color: modelData.is_active ? Color.text : Color.border
                     border.width: 1
 
                     Text {
                         anchors.centerIn: parent
                         text: modelData.name || modelData.idx
-                        color: modelData.is_urgent ? "#f38ba8" : (modelData.is_active ? "#1e1e2e" : "#cdd6f4")
-                        font.family: "Iosevka Nerd Font"
-                        font.pixelSize: 16
+                        color: modelData.is_urgent ? Color.urgent : (modelData.is_active ? Color.background : Color.text)
+                        font.family: Style.font.family
+                        font.pixelSize: Style.font.heading
                     }
 
                     MouseArea {
@@ -159,9 +160,9 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             width: Math.min(implicitWidth, 280)
             text: root.windowTitle
-            color: "#a6adc8"
-            font.family: "Iosevka Nerd Font"
-            font.pixelSize: 14
+            color: Color.subtext
+            font.family: Style.font.family
+            font.pixelSize: Style.font.subtitle
             elide: Text.ElideRight
             visible: text !== ""
         }

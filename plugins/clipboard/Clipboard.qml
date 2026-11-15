@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
+import "../../Commons"
 
 Item {
     id: root
@@ -209,8 +210,8 @@ Item {
             anchors.centerIn: parent
             width: Math.min(560, overlay.width - 48)
             height: Math.min(480, overlay.height - 48)
-            color: "#1e1e2e"
-            border.color: "#45475a"
+            color: Color.background
+            border.color: Color.border
             border.width: 2
 
             MouseArea { anchors.fill: parent; acceptedButtons: Qt.AllButtons }
@@ -227,7 +228,7 @@ Item {
                     Rectangle {
                         width: parent.width - clearButton.width - 8
                         height: 32
-                        color: "#313244"
+                        color: Color.surface
 
                         TextInput {
                             id: filter
@@ -235,9 +236,9 @@ Item {
                             anchors.leftMargin: 10
                             anchors.rightMargin: 10
                             verticalAlignment: TextInput.AlignVCenter
-                            color: "#cdd6f4"
-                            font.family: "Iosevka Nerd Font"
-                            font.pixelSize: 14
+                            color: Color.text
+                            font.family: Style.font.family
+                            font.pixelSize: Style.font.subtitle
                             clip: true
                             selectByMouse: true
                             onTextChanged: root.filterText = text
@@ -256,9 +257,9 @@ Item {
                             anchors.leftMargin: 10
                             anchors.verticalCenter: parent.verticalCenter
                             text: "Search clipboard"
-                            color: "#7f849c"
-                            font.family: "Iosevka Nerd Font"
-                            font.pixelSize: 14
+                            color: Color.muted
+                            font.family: Style.font.family
+                            font.pixelSize: Style.font.subtitle
                             visible: filter.text === "" && !filter.activeFocus
                         }
                     }
@@ -267,16 +268,16 @@ Item {
                         id: clearButton
                         width: 64
                         height: 32
-                        color: clearMouse.containsMouse ? "#313244" : "transparent"
-                        border.color: "#45475a"
+                        color: clearMouse.containsMouse ? Color.surface : "transparent"
+                        border.color: Color.border
                         border.width: 1
 
                         Text {
                             anchors.centerIn: parent
                             text: "Clear"
-                            color: "#f38ba8"
-                            font.family: "Iosevka Nerd Font"
-                            font.pixelSize: 13
+                            color: Color.urgent
+                            font.family: Style.font.family
+                            font.pixelSize: Style.font.body
                         }
 
                         MouseArea {
@@ -305,7 +306,7 @@ Item {
                         required property int index
                         width: list.width
                         height: modelData.type === "image" ? 56 : 36
-                        color: index === root.selected || rowMouse.containsMouse ? "#313244" : "transparent"
+                        color: index === root.selected || rowMouse.containsMouse ? Color.surface : "transparent"
 
                         Row {
                             anchors.fill: parent
@@ -327,9 +328,9 @@ Item {
                                 anchors.verticalCenter: parent.verticalCenter
                                 width: parent.width - (modelData.type === "image" ? 52 : 0)
                                 text: modelData.label
-                                color: "#cdd6f4"
-                                font.family: "Iosevka Nerd Font"
-                                font.pixelSize: 13
+                                color: Color.text
+                                font.family: Style.font.family
+                                font.pixelSize: Style.font.body
                                 elide: Text.ElideRight
                                 maximumLineCount: 1
                             }

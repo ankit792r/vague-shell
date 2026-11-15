@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Bluetooth
 import Quickshell.Wayland
+import "../../../Commons"
 
 Item {
     id: root
@@ -24,7 +25,7 @@ Item {
     }
 
     implicitWidth: row.implicitWidth
-    implicitHeight: 32
+    implicitHeight: Style.bar.height
 
     onOpenedChanged: {
         refresh()
@@ -109,9 +110,9 @@ Item {
         Text {
             anchors.verticalCenter: parent.verticalCenter
             text: !root.radioOn ? "󰂲" : (root.connectedCount > 0 ? "󰂱" : "󰂯")
-            color: "#cdd6f4"
-            font.family: "Iosevka Nerd Font"
-            font.pixelSize: 16
+            color: Color.text
+            font.family: Style.font.family
+            font.pixelSize: Style.font.heading
         }
 
         Text {
@@ -119,9 +120,9 @@ Item {
             width: Math.min(implicitWidth, 160)
             elide: Text.ElideRight
             text: root.name
-            color: "#cdd6f4"
-            font.family: "Iosevka Nerd Font"
-            font.pixelSize: 16
+            color: Color.text
+            font.family: Style.font.family
+            font.pixelSize: Style.font.heading
         }
     }
 
@@ -181,8 +182,8 @@ Item {
 
                     width: 380
                     height: column.implicitHeight + 28
-                    color: "#1e1e2e"
-                    border.color: "#45475a"
+                    color: Color.background
+                    border.color: Color.border
                     border.width: 2
                     x: Math.max(8, Math.min(anchor.x + row.width / 2 - width / 2, screenW - width - 8))
                     y: 40
@@ -210,9 +211,9 @@ Item {
                                 anchors.left: parent.left
                                 anchors.verticalCenter: parent.verticalCenter
                                 text: !root.radioOn ? "󰂲" : (root.connectedCount > 0 ? "󰂱" : "󰂯")
-                                color: "#cdd6f4"
-                                font.family: "Iosevka Nerd Font"
-                                font.pixelSize: 28
+                                color: Color.text
+                                font.family: Style.font.family
+                                font.pixelSize: Style.font.displayLarge
                                 opacity: root.radioOn ? 1 : 0.5
                             }
 
@@ -227,9 +228,9 @@ Item {
                                 Text {
                                     width: parent.width
                                     text: "Bluetooth"
-                                    color: "#cdd6f4"
-                                    font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 16
+                                    color: Color.text
+                                    font.family: Style.font.family
+                                    font.pixelSize: Style.font.heading
                                     font.bold: true
                                     elide: Text.ElideRight
                                 }
@@ -237,9 +238,9 @@ Item {
                                 Text {
                                     width: parent.width
                                     text: root.statusLine
-                                    color: "#7f849c"
-                                    font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 11
+                                    color: Color.muted
+                                    font.family: Style.font.family
+                                    font.pixelSize: Style.font.caption
                                     font.bold: true
                                     font.letterSpacing: 1.2
                                     elide: Text.ElideRight
@@ -252,13 +253,13 @@ Item {
                                 anchors.verticalCenter: parent.verticalCenter
                                 width: 36
                                 height: 20
-                                color: root.radioOn ? "#a6e3a1" : "#45475a"
+                                color: root.radioOn ? Color.success : Color.border
                                 visible: root.adapter !== null
 
                                 Rectangle {
                                     width: 16
                                     height: 16
-                                    color: "#1e1e2e"
+                                    color: Color.background
                                     anchors.verticalCenter: parent.verticalCenter
                                     x: root.radioOn ? parent.width - width - 2 : 2
                                 }
@@ -275,9 +276,9 @@ Item {
                             width: parent.width
                             wrapMode: Text.WordWrap
                             text: !root.adapter ? "No Bluetooth adapter" : (!root.radioOn ? "Turn Bluetooth on to scan" : "Scanning")
-                            color: "#7f849c"
-                            font.family: "Iosevka Nerd Font"
-                            font.pixelSize: 13
+                            color: Color.muted
+                            font.family: Style.font.family
+                            font.pixelSize: Style.font.body
                         }
 
                         ListView {
@@ -301,9 +302,9 @@ Item {
                                 Text {
                                     visible: showHeader
                                     text: root.sectionTitle(modelData.section)
-                                    color: "#7f849c"
-                                    font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 11
+                                    color: Color.muted
+                                    font.family: Style.font.family
+                                    font.pixelSize: Style.font.caption
                                     font.bold: true
                                     font.letterSpacing: 1.2
                                 }
@@ -314,7 +315,7 @@ Item {
                                     anchors.bottom: parent.bottom
                                     height: modelData.connected ? 44 : 36
                                     radius: 8
-                                    color: rowMouse.containsMouse ? "#313244" : "transparent"
+                                    color: rowMouse.containsMouse ? Color.surface : "transparent"
 
                                     Row {
                                         anchors.fill: parent
@@ -326,9 +327,9 @@ Item {
                                             anchors.verticalCenter: parent.verticalCenter
                                             width: 22
                                             text: "󰂯"
-                                            color: modelData.connected ? "#cdd6f4" : "#7f849c"
-                                            font.family: "Iosevka Nerd Font"
-                                            font.pixelSize: 16
+                                            color: modelData.connected ? Color.text : Color.muted
+                                            font.family: Style.font.family
+                                            font.pixelSize: Style.font.heading
                                             horizontalAlignment: Text.AlignHCenter
                                         }
 
@@ -340,9 +341,9 @@ Item {
                                             Text {
                                                 width: parent.width
                                                 text: modelData.name
-                                                color: "#cdd6f4"
-                                                font.family: "Iosevka Nerd Font"
-                                                font.pixelSize: 14
+                                                color: Color.text
+                                                font.family: Style.font.family
+                                                font.pixelSize: Style.font.subtitle
                                                 elide: Text.ElideRight
                                             }
 
@@ -350,9 +351,9 @@ Item {
                                                 visible: modelData.connected
                                                 width: parent.width
                                                 text: modelData.battery >= 0 ? ("Connected · " + modelData.battery + "%") : "Connected"
-                                                color: "#a6adc8"
-                                                font.family: "Iosevka Nerd Font"
-                                                font.pixelSize: 11
+                                                color: Color.subtext
+                                                font.family: Style.font.family
+                                                font.pixelSize: Style.font.caption
                                                 elide: Text.ElideRight
                                             }
                                         }

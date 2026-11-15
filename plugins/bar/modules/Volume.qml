@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Services.Pipewire
 import Quickshell.Wayland
+import "../../../Commons"
 
 Item {
     id: root
@@ -22,7 +23,7 @@ Item {
     readonly property string outputName: sink ? String(sink.description || sink.nickname || sink.name || "Output") : "No output"
 
     implicitWidth: row.implicitWidth
-    implicitHeight: 32
+    implicitHeight: Style.bar.height
 
     function glyph() {
         if (!audio || muted || level <= 0) return "󰖁"
@@ -79,18 +80,18 @@ Item {
         Text {
             anchors.verticalCenter: parent.verticalCenter
             text: "󰓃"
-            color: "#cdd6f4"
-            font.family: "Iosevka Nerd Font"
-            font.pixelSize: 16
+            color: Color.text
+            font.family: Style.font.family
+            font.pixelSize: Style.font.heading
             opacity: root.muted ? 0.5 : 1
         }
 
         Text {
             anchors.verticalCenter: parent.verticalCenter
             text: root.percent + "%"
-            color: "#cdd6f4"
-            font.family: "Iosevka Nerd Font"
-            font.pixelSize: 16
+            color: Color.text
+            font.family: Style.font.family
+            font.pixelSize: Style.font.heading
             opacity: root.muted ? 0.5 : 1
         }
     }
@@ -156,8 +157,8 @@ Item {
 
                     width: 380
                     height: column.implicitHeight + 28
-                    color: "#1e1e2e"
-                    border.color: "#45475a"
+                    color: Color.background
+                    border.color: Color.border
                     border.width: 2
                     x: Math.max(8, Math.min(anchor.x + row.width / 2 - width / 2, screenW - width - 8))
                     y: 40
@@ -185,9 +186,9 @@ Item {
                                 anchors.left: parent.left
                                 anchors.verticalCenter: parent.verticalCenter
                                 text: root.glyph()
-                                color: "#cdd6f4"
-                                font.family: "Iosevka Nerd Font"
-                                font.pixelSize: 28
+                                color: Color.text
+                                font.family: Style.font.family
+                                font.pixelSize: Style.font.displayLarge
                                 opacity: root.muted ? 0.5 : 1
                             }
 
@@ -202,9 +203,9 @@ Item {
                                 Text {
                                     width: parent.width
                                     text: root.outputName
-                                    color: "#cdd6f4"
-                                    font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 16
+                                    color: Color.text
+                                    font.family: Style.font.family
+                                    font.pixelSize: Style.font.heading
                                     font.bold: true
                                     elide: Text.ElideRight
                                 }
@@ -212,9 +213,9 @@ Item {
                                 Text {
                                     width: parent.width
                                     text: root.muted ? "MUTED" : "VOLUME"
-                                    color: "#7f849c"
-                                    font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 11
+                                    color: Color.muted
+                                    font.family: Style.font.family
+                                    font.pixelSize: Style.font.caption
                                     font.bold: true
                                     font.letterSpacing: 1.2
                                 }
@@ -226,12 +227,12 @@ Item {
                                 anchors.verticalCenter: parent.verticalCenter
                                 width: 36
                                 height: 20
-                                color: root.muted ? "#45475a" : "#a6e3a1"
+                                color: root.muted ? Color.border : Color.success
 
                                 Rectangle {
                                     width: 16
                                     height: 16
-                                    color: "#1e1e2e"
+                                    color: Color.background
                                     anchors.verticalCenter: parent.verticalCenter
                                     x: root.muted ? 2 : parent.width - width - 2
                                 }
@@ -251,9 +252,9 @@ Item {
                                 anchors.left: parent.left
                                 anchors.verticalCenter: parent.verticalCenter
                                 text: "VOLUME"
-                                color: "#7f849c"
-                                font.family: "Iosevka Nerd Font"
-                                font.pixelSize: 11
+                                color: Color.muted
+                                font.family: Style.font.family
+                                font.pixelSize: Style.font.caption
                                 font.bold: true
                                 font.letterSpacing: 1.2
                             }
@@ -262,9 +263,9 @@ Item {
                                 anchors.right: parent.right
                                 anchors.verticalCenter: parent.verticalCenter
                                 text: root.percent + "%"
-                                color: "#cdd6f4"
-                                font.family: "Iosevka Nerd Font"
-                                font.pixelSize: 13
+                                color: Color.text
+                                font.family: Style.font.family
+                                font.pixelSize: Style.font.body
                             }
                         }
 
@@ -277,12 +278,12 @@ Item {
                                 anchors.verticalCenter: parent.verticalCenter
                                 width: parent.width
                                 height: 6
-                                color: "#313244"
+                                color: Color.surface
 
                                 Rectangle {
                                     width: parent.width * root.level
                                     height: parent.height
-                                    color: "#cdd6f4"
+                                    color: Color.text
                                     opacity: root.muted ? 0.4 : 1
                                 }
                             }
@@ -296,9 +297,9 @@ Item {
 
                         Text {
                             text: "OUTPUT"
-                            color: "#7f849c"
-                            font.family: "Iosevka Nerd Font"
-                            font.pixelSize: 11
+                            color: Color.muted
+                            font.family: Style.font.family
+                            font.pixelSize: Style.font.caption
                             font.bold: true
                             font.letterSpacing: 1.2
                         }
@@ -314,7 +315,7 @@ Item {
                                 required property var modelData
                                 width: ListView.view.width
                                 height: 32
-                                color: modelData.current || outputMouse.containsMouse ? "#313244" : "transparent"
+                                color: modelData.current || outputMouse.containsMouse ? Color.surface : "transparent"
 
                                 Text {
                                     anchors.verticalCenter: parent.verticalCenter
@@ -323,9 +324,9 @@ Item {
                                     anchors.right: parent.right
                                     anchors.rightMargin: 8
                                     text: modelData.description
-                                    color: "#cdd6f4"
-                                    font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 13
+                                    color: Color.text
+                                    font.family: Style.font.family
+                                    font.pixelSize: Style.font.body
                                     elide: Text.ElideRight
                                 }
 

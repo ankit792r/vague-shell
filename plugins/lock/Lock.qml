@@ -3,6 +3,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Services.Pam
 import Quickshell.Wayland
+import "../../Commons"
 
 Item {
     id: root
@@ -106,7 +107,7 @@ Item {
 
         WlSessionLockSurface {
             id: lockSurface
-            color: "#11111b"
+            color: Color.scrim
 
             SystemClock {
                 id: clock
@@ -121,34 +122,34 @@ Item {
                 Text {
                     anchors.horizontalCenter: parent.horizontalCenter
                     text: Qt.formatDateTime(clock.date, "HH:mm")
-                    color: "#cdd6f4"
-                    font.family: "Iosevka Nerd Font"
-                    font.pixelSize: 72
+                    color: Color.text
+                    font.family: Style.font.family
+                    font.pixelSize: Style.font.clock
                     font.bold: true
                 }
 
                 Text {
                     anchors.horizontalCenter: parent.horizontalCenter
                     text: Qt.formatDateTime(clock.date, "dddd d MMMM")
-                    color: "#a6adc8"
-                    font.family: "Iosevka Nerd Font"
-                    font.pixelSize: 16
+                    color: Color.subtext
+                    font.family: Style.font.family
+                    font.pixelSize: Style.font.heading
                 }
 
                 Text {
                     anchors.horizontalCenter: parent.horizontalCenter
                     text: root.userName
-                    color: "#7f849c"
-                    font.family: "Iosevka Nerd Font"
-                    font.pixelSize: 14
+                    color: Color.muted
+                    font.family: Style.font.family
+                    font.pixelSize: Style.font.subtitle
                 }
 
                 Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter
                     width: 320
                     height: 44
-                    color: "#1e1e2e"
-                    border.color: root.failureMessage ? "#f38ba8" : "#45475a"
+                    color: Color.background
+                    border.color: root.failureMessage ? Color.urgent : Color.border
                     border.width: 2
 
                     TextInput {
@@ -157,9 +158,9 @@ Item {
                         anchors.leftMargin: 14
                         anchors.rightMargin: 14
                         verticalAlignment: TextInput.AlignVCenter
-                        color: "#cdd6f4"
-                        font.family: "Iosevka Nerd Font"
-                        font.pixelSize: 16
+                        color: Color.text
+                        font.family: Style.font.family
+                        font.pixelSize: Style.font.heading
                         font.bold: true
                         focus: true
                         echoMode: TextInput.Password
@@ -180,9 +181,9 @@ Item {
                         anchors.leftMargin: 14
                         anchors.verticalCenter: parent.verticalCenter
                         text: root.authenticating ? "Checking" : "Password"
-                        color: "#7f849c"
-                        font.family: "Iosevka Nerd Font"
-                        font.pixelSize: 16
+                        color: Color.muted
+                        font.family: Style.font.family
+                        font.pixelSize: Style.font.heading
                         visible: passwordInput.text.length === 0
                     }
                 }
@@ -190,9 +191,9 @@ Item {
                 Text {
                     anchors.horizontalCenter: parent.horizontalCenter
                     text: root.failureMessage
-                    color: "#f38ba8"
-                    font.family: "Iosevka Nerd Font"
-                    font.pixelSize: 13
+                    color: Color.urgent
+                    font.family: Style.font.family
+                    font.pixelSize: Style.font.body
                     visible: text !== ""
                 }
             }

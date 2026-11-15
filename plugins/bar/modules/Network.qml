@@ -4,6 +4,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Networking
 import Quickshell.Wayland
+import "../../../Commons"
 
 Item {
     id: root
@@ -23,7 +24,7 @@ Item {
     }
 
     implicitWidth: row.implicitWidth
-    implicitHeight: 32
+    implicitHeight: Style.bar.height
 
     onOpenedChanged: {
         if (!opened) {
@@ -178,9 +179,9 @@ Item {
         Text {
             anchors.verticalCenter: parent.verticalCenter
             text: root.kind === "ethernet" ? "󰈀" : (root.kind === "wifi" ? "󰤨" : "󰤮")
-            color: "#cdd6f4"
-            font.family: "Iosevka Nerd Font"
-            font.pixelSize: 16
+            color: Color.text
+            font.family: Style.font.family
+            font.pixelSize: Style.font.heading
         }
 
         Text {
@@ -188,9 +189,9 @@ Item {
             width: Math.min(implicitWidth, 200)
             elide: Text.ElideRight
             text: root.name
-            color: "#cdd6f4"
-            font.family: "Iosevka Nerd Font"
-            font.pixelSize: 16
+            color: Color.text
+            font.family: Style.font.family
+            font.pixelSize: Style.font.heading
         }
     }
 
@@ -246,8 +247,8 @@ Item {
                     width: 380
                     height: column.implicitHeight + 28
                     // radius: 18
-                    color: "#1e1e2e"
-                    border.color: "#45475a"
+                    color: Color.background
+                    border.color: Color.border
                     border.width: 2
                     x: Math.max(8, Math.min(anchor.x + row.width / 2 - width / 2, screenW - width - 8))
                     y: 40
@@ -275,9 +276,9 @@ Item {
                                 anchors.left: parent.left
                                 anchors.verticalCenter: parent.verticalCenter
                                 text: root.kind === "ethernet" ? "󰈀" : (Networking.wifiEnabled ? "󰤨" : "󰤮")
-                                color: "#cdd6f4"
-                                font.family: "Iosevka Nerd Font"
-                                font.pixelSize: 28
+                                color: Color.text
+                                font.family: Style.font.family
+                                font.pixelSize: Style.font.displayLarge
                             }
 
                             Column {
@@ -291,9 +292,9 @@ Item {
                                 Text {
                                     width: parent.width
                                     text: root.name
-                                    color: "#cdd6f4"
-                                    font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 16
+                                    color: Color.text
+                                    font.family: Style.font.family
+                                    font.pixelSize: Style.font.heading
                                     font.bold: true
                                     elide: Text.ElideRight
                                 }
@@ -301,9 +302,9 @@ Item {
                                 Text {
                                     width: parent.width
                                     text: root.statusLine
-                                    color: "#7f849c"
-                                    font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 11
+                                    color: Color.muted
+                                    font.family: Style.font.family
+                                    font.pixelSize: Style.font.caption
                                     font.bold: true
                                     font.letterSpacing: 1.2
                                     elide: Text.ElideRight
@@ -317,13 +318,13 @@ Item {
                                 width: 36
                                 height: 20
                                 // radius: 10
-                                color: Networking.wifiEnabled ? "#a6e3a1" : "#45475a"
+                                color: Networking.wifiEnabled ? Color.success : Color.border
 
                                 Rectangle {
                                     width: 16
                                     height: 16
                                     // radius: 8
-                                    color: "#1e1e2e"
+                                    color: Color.background
                                     anchors.verticalCenter: parent.verticalCenter
                                     x: Networking.wifiEnabled ? parent.width - width - 2 : 2
                                 }
@@ -341,17 +342,17 @@ Item {
                             placeholderText: "Password for " + root.passwordFor
                             echoMode: TextInput.Password
                             text: root.passwordText
-                            color: "#cdd6f4"
-                            font.family: "Iosevka Nerd Font"
+                            color: Color.text
+                            font.family: Style.font.family
                             onTextChanged: root.passwordText = text
                             onAccepted: if (root.passwordText !== "") connectWithPassword.running = true
                         }
 
                         Text {
                             text: "WI-FI"
-                            color: "#7f849c"
-                            font.family: "Iosevka Nerd Font"
-                            font.pixelSize: 11
+                            color: Color.muted
+                            font.family: Style.font.family
+                            font.pixelSize: Style.font.caption
                             font.bold: true
                             font.letterSpacing: 1.2
                         }
@@ -369,7 +370,7 @@ Item {
                                 width: ListView.view.width
                                 height: modelData.connected ? 44 : 36
                                 radius: 8
-                                color: rowMouse.containsMouse ? "#313244" : "transparent"
+                                color: rowMouse.containsMouse ? Color.surface : "transparent"
 
                                 Row {
                                     anchors.fill: parent
@@ -381,9 +382,9 @@ Item {
                                         anchors.verticalCenter: parent.verticalCenter
                                         width: 22
                                         text: root.bars(modelData.signal)
-                                        color: modelData.connected ? "#cdd6f4" : "#7f849c"
-                                        font.family: "Iosevka Nerd Font"
-                                        font.pixelSize: 16
+                                        color: modelData.connected ? Color.text : Color.muted
+                                        font.family: Style.font.family
+                                        font.pixelSize: Style.font.heading
                                         horizontalAlignment: Text.AlignHCenter
                                     }
 
@@ -395,9 +396,9 @@ Item {
                                         Text {
                                             width: parent.width
                                             text: modelData.ssid
-                                            color: "#cdd6f4"
-                                            font.family: "Iosevka Nerd Font"
-                                            font.pixelSize: 14
+                                            color: Color.text
+                                            font.family: Style.font.family
+                                            font.pixelSize: Style.font.subtitle
                                             elide: Text.ElideRight
                                         }
 
@@ -405,9 +406,9 @@ Item {
                                             visible: modelData.connected
                                             width: parent.width
                                             text: "Connected"
-                                            color: "#a6adc8"
-                                            font.family: "Iosevka Nerd Font"
-                                            font.pixelSize: 11
+                                            color: Color.subtext
+                                            font.family: Style.font.family
+                                            font.pixelSize: Style.font.caption
                                             elide: Text.ElideRight
                                         }
                                     }
@@ -416,9 +417,9 @@ Item {
                                         id: lockGlyph
                                         anchors.verticalCenter: parent.verticalCenter
                                         text: modelData.secure ? "󰌾" : ""
-                                        color: "#7f849c"
-                                        font.family: "Iosevka Nerd Font"
-                                        font.pixelSize: 14
+                                        color: Color.muted
+                                        font.family: Style.font.family
+                                        font.pixelSize: Style.font.subtitle
                                     }
                                 }
 

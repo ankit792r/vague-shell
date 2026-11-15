@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import Quickshell.Wayland
+import "../../../Commons"
 
 Item {
     id: root
@@ -10,7 +11,7 @@ Item {
     property bool nightLight: false
 
     implicitWidth: icon.width
-    implicitHeight: 32
+    implicitHeight: Style.bar.height
 
     function run(command) {
         Quickshell.execDetached(command)
@@ -23,9 +24,9 @@ Item {
         width: Math.max(implicitWidth, 18)
         height: 32
         text: ""
-        color: "#cdd6f4"
-        font.family: "Iosevka Nerd Font"
-        font.pixelSize: 16
+        color: Color.text
+        font.family: Style.font.family
+        font.pixelSize: Style.font.heading
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
     }
@@ -81,8 +82,8 @@ Item {
 
                     width: 440
                     height: column.implicitHeight + 28
-                    color: "#1e1e2e"
-                    border.color: "#45475a"
+                    color: Color.background
+                    border.color: Color.border
                     border.width: 2
                     x: Math.max(8, Math.min(anchor.x + icon.width / 2 - width / 2, screenW - width - 8))
                     y: 40
@@ -103,9 +104,9 @@ Item {
 
                         Text {
                             text: "Session"
-                            color: "#cdd6f4"
-                            font.family: "Iosevka Nerd Font"
-                            font.pixelSize: 16
+                            color: Color.text
+                            font.family: Style.font.family
+                            font.pixelSize: Style.font.heading
                             font.bold: true
                         }
 
@@ -126,8 +127,8 @@ Item {
                                     required property var modelData
                                     width: (parent.width - 32) / 5
                                     height: 64
-                                    color: actionMouse.containsMouse ? "#313244" : "transparent"
-                                    border.color: modelData.label === "Power off" ? "#f38ba8" : "#45475a"
+                                    color: actionMouse.containsMouse ? Color.surface : "transparent"
+                                    border.color: modelData.label === "Power off" ? Color.urgent : Color.border
                                     border.width: 1
 
                                     Column {
@@ -137,17 +138,17 @@ Item {
                                         Text {
                                             anchors.horizontalCenter: parent.horizontalCenter
                                             text: modelData.icon
-                                            color: modelData.label === "Power off" ? "#f38ba8" : "#cdd6f4"
-                                            font.family: "Iosevka Nerd Font"
-                                            font.pixelSize: 18
+                                            color: modelData.label === "Power off" ? Color.urgent : Color.text
+                                            font.family: Style.font.family
+                                            font.pixelSize: Style.font.iconLarge
                                         }
 
                                         Text {
                                             anchors.horizontalCenter: parent.horizontalCenter
                                             text: modelData.label
-                                            color: modelData.label === "Power off" ? "#f38ba8" : "#cdd6f4"
-                                            font.family: "Iosevka Nerd Font"
-                                            font.pixelSize: 11
+                                            color: modelData.label === "Power off" ? Color.urgent : Color.text
+                                            font.family: Style.font.family
+                                            font.pixelSize: Style.font.caption
                                         }
                                     }
 
@@ -168,8 +169,8 @@ Item {
                             Rectangle {
                                 width: (parent.width - 8) / 2
                                 height: 40
-                                color: root.dnd ? "#313244" : "transparent"
-                                border.color: root.dnd ? "#cdd6f4" : "#45475a"
+                                color: root.dnd ? Color.surface : "transparent"
+                                border.color: root.dnd ? Color.text : Color.border
                                 border.width: 1
 
                                 Row {
@@ -179,17 +180,17 @@ Item {
                                     Text {
                                         anchors.verticalCenter: parent.verticalCenter
                                         text: "󰂛"
-                                        color: "#cdd6f4"
-                                        font.family: "Iosevka Nerd Font"
-                                        font.pixelSize: 16
+                                        color: Color.text
+                                        font.family: Style.font.family
+                                        font.pixelSize: Style.font.heading
                                     }
 
                                     Text {
                                         anchors.verticalCenter: parent.verticalCenter
                                         text: "DND"
-                                        color: "#cdd6f4"
-                                        font.family: "Iosevka Nerd Font"
-                                        font.pixelSize: 13
+                                        color: Color.text
+                                        font.family: Style.font.family
+                                        font.pixelSize: Style.font.body
                                     }
                                 }
 
@@ -202,8 +203,8 @@ Item {
                             Rectangle {
                                 width: (parent.width - 8) / 2
                                 height: 40
-                                color: root.nightLight ? "#313244" : "transparent"
-                                border.color: root.nightLight ? "#f9e2af" : "#45475a"
+                                color: root.nightLight ? Color.surface : "transparent"
+                                border.color: root.nightLight ? Color.warning : Color.border
                                 border.width: 1
 
                                 Row {
@@ -213,17 +214,17 @@ Item {
                                     Text {
                                         anchors.verticalCenter: parent.verticalCenter
                                         text: "󰖔"
-                                        color: root.nightLight ? "#f9e2af" : "#cdd6f4"
-                                        font.family: "Iosevka Nerd Font"
-                                        font.pixelSize: 16
+                                        color: root.nightLight ? Color.warning : Color.text
+                                        font.family: Style.font.family
+                                        font.pixelSize: Style.font.heading
                                     }
 
                                     Text {
                                         anchors.verticalCenter: parent.verticalCenter
                                         text: "Night light"
-                                        color: root.nightLight ? "#f9e2af" : "#cdd6f4"
-                                        font.family: "Iosevka Nerd Font"
-                                        font.pixelSize: 13
+                                        color: root.nightLight ? Color.warning : Color.text
+                                        font.family: Style.font.family
+                                        font.pixelSize: Style.font.body
                                     }
                                 }
 

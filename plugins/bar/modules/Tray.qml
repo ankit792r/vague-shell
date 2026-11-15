@@ -1,12 +1,13 @@
 import QtQuick
 import Quickshell
 import Quickshell.Services.SystemTray
+import "../../../Commons"
 
 Item {
     id: root
 
     implicitWidth: row.implicitWidth
-    implicitHeight: 32
+    implicitHeight: Style.bar.height
 
     Row {
     id: row

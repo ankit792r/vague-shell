@@ -1,6 +1,7 @@
 
 import QtQuick
 import Quickshell.Services.UPower
+import "../../../Commons"
 
 Item {
     id: root
@@ -14,7 +15,7 @@ Item {
     readonly property bool pluggedIn: present && !UPower.onBattery
 
     implicitWidth: label.implicitWidth
-    implicitHeight: 32
+    implicitHeight: Style.bar.height
 
     Text {
         id: label
@@ -39,8 +40,8 @@ Item {
             return icon + " " + root.percent + "%"
         }
 
-        color: "#cdd6f4"
-        font.family: "Iosevka Nerd Font"
-        font.pixelSize: 16
+        color: Color.text
+        font.family: Style.font.family
+        font.pixelSize: Style.font.heading
     }
 }

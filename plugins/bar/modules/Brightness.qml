@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
+import "../../../Commons"
 
 Item {
     id: root
@@ -14,7 +15,7 @@ Item {
     readonly property int percent: brightnessMax > 0 ? Math.round(brightness * 100 / brightnessMax) : 0
 
     implicitWidth: row.implicitWidth
-    implicitHeight: 32
+    implicitHeight: Style.bar.height
 
     function setBrightness(nextPercent) {
         var clamped = Math.max(0, Math.min(100, Math.round(nextPercent)))
@@ -58,17 +59,17 @@ Item {
         Text {
             anchors.verticalCenter: parent.verticalCenter
             text: "󰃠"
-            color: "#cdd6f4"
-            font.family: "Iosevka Nerd Font"
-            font.pixelSize: 16
+            color: Color.text
+            font.family: Style.font.family
+            font.pixelSize: Style.font.heading
         }
 
         Text {
             anchors.verticalCenter: parent.verticalCenter
             text: root.percent + "%"
-            color: "#cdd6f4"
-            font.family: "Iosevka Nerd Font"
-            font.pixelSize: 16
+            color: Color.text
+            font.family: Style.font.family
+            font.pixelSize: Style.font.heading
         }
     }
 
@@ -126,8 +127,8 @@ Item {
 
                     width: 380
                     height: column.implicitHeight + 28
-                    color: "#1e1e2e"
-                    border.color: "#45475a"
+                    color: Color.background
+                    border.color: Color.border
                     border.width: 2
                     x: Math.max(8, Math.min(anchor.x + row.width / 2 - width / 2, screenW - width - 8))
                     y: 40
@@ -155,9 +156,9 @@ Item {
                                 anchors.left: parent.left
                                 anchors.verticalCenter: parent.verticalCenter
                                 text: "󰃠"
-                                color: "#cdd6f4"
-                                font.family: "Iosevka Nerd Font"
-                                font.pixelSize: 28
+                                color: Color.text
+                                font.family: Style.font.family
+                                font.pixelSize: Style.font.displayLarge
                             }
 
                             Column {
@@ -170,9 +171,9 @@ Item {
                                 Text {
                                     width: parent.width
                                     text: "Built-in display"
-                                    color: "#cdd6f4"
-                                    font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 16
+                                    color: Color.text
+                                    font.family: Style.font.family
+                                    font.pixelSize: Style.font.heading
                                     font.bold: true
                                     elide: Text.ElideRight
                                 }
@@ -180,9 +181,9 @@ Item {
                                 Text {
                                     width: parent.width
                                     text: "INTEL_BACKLIGHT"
-                                    color: "#7f849c"
-                                    font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 11
+                                    color: Color.muted
+                                    font.family: Style.font.family
+                                    font.pixelSize: Style.font.caption
                                     font.bold: true
                                     font.letterSpacing: 1.2
                                 }
@@ -197,9 +198,9 @@ Item {
                                 anchors.left: parent.left
                                 anchors.verticalCenter: parent.verticalCenter
                                 text: "BRIGHTNESS"
-                                color: "#7f849c"
-                                font.family: "Iosevka Nerd Font"
-                                font.pixelSize: 11
+                                color: Color.muted
+                                font.family: Style.font.family
+                                font.pixelSize: Style.font.caption
                                 font.bold: true
                                 font.letterSpacing: 1.2
                             }
@@ -208,9 +209,9 @@ Item {
                                 anchors.right: parent.right
                                 anchors.verticalCenter: parent.verticalCenter
                                 text: root.percent + "%"
-                                color: "#cdd6f4"
-                                font.family: "Iosevka Nerd Font"
-                                font.pixelSize: 13
+                                color: Color.text
+                                font.family: Style.font.family
+                                font.pixelSize: Style.font.body
                             }
                         }
 
@@ -223,12 +224,12 @@ Item {
                                 anchors.verticalCenter: parent.verticalCenter
                                 width: parent.width
                                 height: 6
-                                color: "#313244"
+                                color: Color.surface
 
                                 Rectangle {
                                     width: parent.width * root.percent / 100
                                     height: parent.height
-                                    color: "#f9e2af"
+                                    color: Color.warning
                                 }
                             }
 
@@ -249,9 +250,9 @@ Item {
 
                                 Text {
                                     text: "CURRENT"
-                                    color: "#7f849c"
-                                    font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 11
+                                    color: Color.muted
+                                    font.family: Style.font.family
+                                    font.pixelSize: Style.font.caption
                                     font.bold: true
                                     font.letterSpacing: 1.2
                                 }
@@ -259,9 +260,9 @@ Item {
                                 Text {
                                     anchors.right: parent.right
                                     text: root.brightness
-                                    color: "#cdd6f4"
-                                    font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 13
+                                    color: Color.text
+                                    font.family: Style.font.family
+                                    font.pixelSize: Style.font.body
                                 }
                             }
 
@@ -271,9 +272,9 @@ Item {
 
                                 Text {
                                     text: "MAXIMUM"
-                                    color: "#7f849c"
-                                    font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 11
+                                    color: Color.muted
+                                    font.family: Style.font.family
+                                    font.pixelSize: Style.font.caption
                                     font.bold: true
                                     font.letterSpacing: 1.2
                                 }
@@ -281,9 +282,9 @@ Item {
                                 Text {
                                     anchors.right: parent.right
                                     text: root.brightnessMax
-                                    color: "#cdd6f4"
-                                    font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 13
+                                    color: Color.text
+                                    font.family: Style.font.family
+                                    font.pixelSize: Style.font.body
                                 }
                             }
 
@@ -293,9 +294,9 @@ Item {
 
                                 Text {
                                     text: "DEVICE"
-                                    color: "#7f849c"
-                                    font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 11
+                                    color: Color.muted
+                                    font.family: Style.font.family
+                                    font.pixelSize: Style.font.caption
                                     font.bold: true
                                     font.letterSpacing: 1.2
                                 }
@@ -303,9 +304,9 @@ Item {
                                 Text {
                                     anchors.right: parent.right
                                     text: "intel_backlight"
-                                    color: "#cdd6f4"
-                                    font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 13
+                                    color: Color.text
+                                    font.family: Style.font.family
+                                    font.pixelSize: Style.font.body
                                 }
                             }
                         }

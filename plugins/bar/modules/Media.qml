@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Services.Mpris
 import Quickshell.Wayland
+import "../../../Commons"
 
 Item {
     id: root
@@ -19,7 +20,7 @@ Item {
 
     visible: hasMedia
     implicitWidth: hasMedia ? row.implicitWidth : 0
-    implicitHeight: 32
+    implicitHeight: Style.bar.height
 
     function list() {
         return Mpris.players ? Mpris.players.values : []
@@ -99,18 +100,18 @@ Item {
         Text {
             anchors.verticalCenter: parent.verticalCenter
             text: root.active && root.active.isPlaying ? "󰏤" : "󰐊"
-            color: "#cdd6f4"
-            font.family: "Iosevka Nerd Font"
-            font.pixelSize: 16
+            color: Color.text
+            font.family: Style.font.family
+            font.pixelSize: Style.font.heading
         }
 
         Text {
             anchors.verticalCenter: parent.verticalCenter
             width: Math.min(implicitWidth, 180)
             text: root.title + (root.artist ? "  ·  " + root.artist : "")
-            color: "#cdd6f4"
-            font.family: "Iosevka Nerd Font"
-            font.pixelSize: 14
+            color: Color.text
+            font.family: Style.font.family
+            font.pixelSize: Style.font.subtitle
             elide: Text.ElideRight
         }
     }
@@ -170,8 +171,8 @@ Item {
 
                     width: 340
                     height: column.implicitHeight + 28
-                    color: "#1e1e2e"
-                    border.color: "#45475a"
+                    color: Color.background
+                    border.color: Color.border
                     border.width: 2
                     x: Math.max(8, Math.min(anchor.x + row.width / 2 - width / 2, screenW - width - 8))
                     y: 40
@@ -194,7 +195,7 @@ Item {
                             Rectangle {
                                 width: 64
                                 height: 64
-                                color: "#313244"
+                                color: Color.surface
 
                                 Image {
                                     anchors.fill: parent
@@ -209,9 +210,9 @@ Item {
                                     anchors.centerIn: parent
                                     visible: !parent.children[0].visible
                                     text: "󰝚"
-                                    color: "#cdd6f4"
-                                    font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 28
+                                    color: Color.text
+                                    font.family: Style.font.family
+                                    font.pixelSize: Style.font.displayLarge
                                 }
                             }
 
@@ -223,27 +224,27 @@ Item {
                                 Text {
                                     width: parent.width
                                     text: root.title || "Nothing playing"
-                                    color: "#cdd6f4"
-                                    font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 15
+                                    color: Color.text
+                                    font.family: Style.font.family
+                                    font.pixelSize: Style.font.title
                                     font.bold: true
                                     elide: Text.ElideRight
                                 }
                                 Text {
                                     width: parent.width
                                     text: root.artist
-                                    color: "#a6adc8"
-                                    font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 13
+                                    color: Color.subtext
+                                    font.family: Style.font.family
+                                    font.pixelSize: Style.font.body
                                     elide: Text.ElideRight
                                     visible: text !== ""
                                 }
                                 Text {
                                     width: parent.width
                                     text: root.active && root.active.trackAlbum ? root.active.trackAlbum : ""
-                                    color: "#7f849c"
-                                    font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 12
+                                    color: Color.muted
+                                    font.family: Style.font.family
+                                    font.pixelSize: Style.font.bodySmall
                                     elide: Text.ElideRight
                                     visible: text !== ""
                                 }
@@ -254,12 +255,12 @@ Item {
                             visible: root.active && root.active.lengthSupported && root.active.length > 0
                             width: parent.width
                             height: 6
-                            color: "#313244"
+                            color: Color.surface
 
                             Rectangle {
                                 width: parent.width * root.progress
                                 height: parent.height
-                                color: "#cdd6f4"
+                                color: Color.text
                             }
 
                             MouseArea {
@@ -278,16 +279,16 @@ Item {
 
                             Text {
                                 text: root.active ? root.clock(root.active.position) : ""
-                                color: "#7f849c"
-                                font.family: "Iosevka Nerd Font"
-                                font.pixelSize: 11
+                                color: Color.muted
+                                font.family: Style.font.family
+                                font.pixelSize: Style.font.caption
                             }
                             Text {
                                 anchors.right: parent.right
                                 text: root.active ? root.clock(root.active.length) : ""
-                                color: "#7f849c"
-                                font.family: "Iosevka Nerd Font"
-                                font.pixelSize: 11
+                                color: Color.muted
+                                font.family: Style.font.family
+                                font.pixelSize: Style.font.caption
                             }
                         }
 
@@ -297,23 +298,23 @@ Item {
 
                             Text {
                                 text: "󰒮"
-                                color: root.active && root.active.canGoPrevious ? "#cdd6f4" : "#45475a"
-                                font.family: "Iosevka Nerd Font"
-                                font.pixelSize: 20
+                                color: root.active && root.active.canGoPrevious ? Color.text : Color.border
+                                font.family: Style.font.family
+                                font.pixelSize: Style.font.displaySmall
                                 MouseArea { anchors.fill: parent; onClicked: root.act("previous") }
                             }
                             Text {
                                 text: root.active && root.active.isPlaying ? "󰏤" : "󰐊"
-                                color: "#cdd6f4"
-                                font.family: "Iosevka Nerd Font"
-                                font.pixelSize: 24
+                                color: Color.text
+                                font.family: Style.font.family
+                                font.pixelSize: Style.font.display
                                 MouseArea { anchors.fill: parent; onClicked: root.act("toggle") }
                             }
                             Text {
                                 text: "󰒭"
-                                color: root.active && root.active.canGoNext ? "#cdd6f4" : "#45475a"
-                                font.family: "Iosevka Nerd Font"
-                                font.pixelSize: 20
+                                color: root.active && root.active.canGoNext ? Color.text : Color.border
+                                font.family: Style.font.family
+                                font.pixelSize: Style.font.displaySmall
                                 MouseArea { anchors.fill: parent; onClicked: root.act("next") }
                             }
                         }
@@ -330,7 +331,7 @@ Item {
                                     required property var modelData
                                     width: parent.width
                                     height: 36
-                                    color: root.active && modelData.key === root.active.dbusName ? "#313244" : "transparent"
+                                    color: root.active && modelData.key === root.active.dbusName ? Color.surface : "transparent"
 
                                     Column {
                                         anchors.verticalCenter: parent.verticalCenter
@@ -342,17 +343,17 @@ Item {
                                         Text {
                                             width: parent.width
                                             text: modelData.title
-                                            color: "#cdd6f4"
-                                            font.family: "Iosevka Nerd Font"
-                                            font.pixelSize: 13
+                                            color: Color.text
+                                            font.family: Style.font.family
+                                            font.pixelSize: Style.font.body
                                             elide: Text.ElideRight
                                         }
                                         Text {
                                             width: parent.width
                                             text: modelData.artist
-                                            color: "#7f849c"
-                                            font.family: "Iosevka Nerd Font"
-                                            font.pixelSize: 11
+                                            color: Color.muted
+                                            font.family: Style.font.family
+                                            font.pixelSize: Style.font.caption
                                             elide: Text.ElideRight
                                             visible: text !== ""
                                         }

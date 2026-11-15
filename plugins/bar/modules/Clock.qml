@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import Quickshell.Wayland
+import "../../../Commons"
 
 Item {
     id: root
@@ -33,7 +34,7 @@ Item {
     }
 
     implicitWidth: label.implicitWidth
-    implicitHeight: 32
+    implicitHeight: Style.bar.height
 
     function isToday(day) {
         var now = clock.date
@@ -60,9 +61,9 @@ Item {
         id: label
         anchors.verticalCenter: parent.verticalCenter
         text: Qt.formatDateTime(clock.date, "ddd HH:mm")
-        color: "#cdd6f4"
-        font.family: "Iosevka Nerd Font"
-        font.pixelSize: 16
+        color: Color.text
+        font.family: Style.font.family
+        font.pixelSize: Style.font.heading
     }
 
     MouseArea {
@@ -120,8 +121,8 @@ Item {
 
                     width: 308
                     height: column.implicitHeight + 28
-                    color: "#1e1e2e"
-                    border.color: "#45475a"
+                    color: Color.background
+                    border.color: Color.border
                     border.width: 2
                     x: Math.max(8, Math.min(anchor.x + label.width / 2 - width / 2, screenW - width - 8))
                     y: 40
@@ -149,9 +150,9 @@ Item {
                                 anchors.left: parent.left
                                 anchors.verticalCenter: parent.verticalCenter
                                 text: "‹"
-                                color: "#cdd6f4"
-                                font.family: "Iosevka Nerd Font"
-                                font.pixelSize: 18
+                                color: Color.text
+                                font.family: Style.font.family
+                                font.pixelSize: Style.font.iconLarge
 
                                 MouseArea {
                                     anchors.fill: parent
@@ -162,9 +163,9 @@ Item {
                             Text {
                                 anchors.centerIn: parent
                                 text: new Date(root.viewYear, root.viewMonth, 1).toLocaleString(Qt.locale(), "MMMM yyyy")
-                                color: "#cdd6f4"
-                                font.family: "Iosevka Nerd Font"
-                                font.pixelSize: 16
+                                color: Color.text
+                                font.family: Style.font.family
+                                font.pixelSize: Style.font.heading
                                 font.bold: true
                             }
 
@@ -172,9 +173,9 @@ Item {
                                 anchors.right: parent.right
                                 anchors.verticalCenter: parent.verticalCenter
                                 text: "›"
-                                color: "#cdd6f4"
-                                font.family: "Iosevka Nerd Font"
-                                font.pixelSize: 18
+                                color: Color.text
+                                font.family: Style.font.family
+                                font.pixelSize: Style.font.iconLarge
 
                                 MouseArea {
                                     anchors.fill: parent
@@ -196,9 +197,9 @@ Item {
                                     width: 36
                                     height: 18
                                     text: modelData
-                                    color: "#7f849c"
-                                    font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 11
+                                    color: Color.muted
+                                    font.family: Style.font.family
+                                    font.pixelSize: Style.font.caption
                                     font.bold: true
                                     horizontalAlignment: Text.AlignHCenter
                                 }
@@ -217,15 +218,15 @@ Item {
                                     required property int modelData
                                     width: 36
                                     height: 28
-                                    color: modelData > 0 && root.isToday(modelData) ? "#cdd6f4" : "transparent"
+                                    color: modelData > 0 && root.isToday(modelData) ? Color.text : "transparent"
 
                                     Text {
                                         anchors.centerIn: parent
                                         visible: modelData > 0
                                         text: modelData
-                                        color: root.isToday(modelData) ? "#1e1e2e" : "#cdd6f4"
-                                        font.family: "Iosevka Nerd Font"
-                                        font.pixelSize: 13
+                                        color: root.isToday(modelData) ? Color.background : Color.text
+                                        font.family: Style.font.family
+                                        font.pixelSize: Style.font.body
                                     }
                                 }
                             }

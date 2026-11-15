@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
+import "../../../Commons"
 
 Item {
     id: root
@@ -24,7 +25,7 @@ Item {
     readonly property int swapPercent: swapTotalKb > 0 ? Math.round(swapUsedKb * 100 / swapTotalKb) : 0
 
     implicitWidth: row.implicitWidth
-    implicitHeight: 32
+    implicitHeight: Style.bar.height
 
     function formatGb(kb) {
         var gb = kb / 1024 / 1024
@@ -177,16 +178,16 @@ Item {
             Text {
                 anchors.verticalCenter: parent.verticalCenter
                 text: ""
-                color: "#cdd6f4"
-                font.family: "Iosevka Nerd Font"
-                font.pixelSize: 16
+                color: Color.text
+                font.family: Style.font.family
+                font.pixelSize: Style.font.heading
             }
             Text {
                 anchors.verticalCenter: parent.verticalCenter
                 text: root.cpu + "%"
-                color: "#cdd6f4"
-                font.family: "Iosevka Nerd Font"
-                font.pixelSize: 16
+                color: Color.text
+                font.family: Style.font.family
+                font.pixelSize: Style.font.heading
             }
         }
 
@@ -195,16 +196,16 @@ Item {
             Text {
                 anchors.verticalCenter: parent.verticalCenter
                 text: ""
-                color: "#cdd6f4"
-                font.family: "Iosevka Nerd Font"
-                font.pixelSize: 16
+                color: Color.text
+                font.family: Style.font.family
+                font.pixelSize: Style.font.heading
             }
             Text {
                 anchors.verticalCenter: parent.verticalCenter
                 text: root.formatGb(root.memUsedKb)
-                color: "#cdd6f4"
-                font.family: "Iosevka Nerd Font"
-                font.pixelSize: 16
+                color: Color.text
+                font.family: Style.font.family
+                font.pixelSize: Style.font.heading
             }
         }
     }
@@ -260,8 +261,8 @@ Item {
 
                     width: 460
                     height: column.implicitHeight + 28
-                    color: "#1e1e2e"
-                    border.color: "#45475a"
+                    color: Color.background
+                    border.color: Color.border
                     border.width: 2
                     x: Math.max(8, Math.min(anchor.x + row.width / 2 - width / 2, screenW - width - 8))
                     y: 40
@@ -282,9 +283,9 @@ Item {
 
                         Text {
                             text: "System"
-                            color: "#cdd6f4"
-                            font.family: "Iosevka Nerd Font"
-                            font.pixelSize: 18
+                            color: Color.text
+                            font.family: Style.font.family
+                            font.pixelSize: Style.font.iconLarge
                             font.bold: true
                         }
 
@@ -298,9 +299,9 @@ Item {
 
                                 Text {
                                     text: "CPU"
-                                    color: "#7f849c"
-                                    font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 14
+                                    color: Color.muted
+                                    font.family: Style.font.family
+                                    font.pixelSize: Style.font.subtitle
                                     font.bold: true
                                     font.letterSpacing: 1.2
                                 }
@@ -308,20 +309,20 @@ Item {
                                 Text {
                                     anchors.right: parent.right
                                     text: root.cpu + "%"
-                                    color: "#cdd6f4"
-                                    font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 14
+                                    color: Color.text
+                                    font.family: Style.font.family
+                                    font.pixelSize: Style.font.subtitle
                                 }
                             }
 
                             Rectangle {
                                 width: parent.width
                                 height: 8
-                                color: "#313244"
+                                color: Color.surface
                                 Rectangle {
                                     width: parent.width * root.cpu / 100
                                     height: parent.height
-                                    color: "#cdd6f4"
+                                    color: Color.text
                                 }
                             }
                         }
@@ -336,9 +337,9 @@ Item {
 
                                 Text {
                                     text: "MEM"
-                                    color: "#7f849c"
-                                    font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 14
+                                    color: Color.muted
+                                    font.family: Style.font.family
+                                    font.pixelSize: Style.font.subtitle
                                     font.bold: true
                                     font.letterSpacing: 1.2
                                 }
@@ -346,20 +347,20 @@ Item {
                                 Text {
                                     anchors.right: parent.right
                                     text: root.formatGb(root.memUsedKb) + " / " + root.formatGb(root.memTotalKb)
-                                    color: "#cdd6f4"
-                                    font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 14
+                                    color: Color.text
+                                    font.family: Style.font.family
+                                    font.pixelSize: Style.font.subtitle
                                 }
                             }
 
                             Rectangle {
                                 width: parent.width
                                 height: 8
-                                color: "#313244"
+                                color: Color.surface
                                 Rectangle {
                                     width: parent.width * root.memPercent / 100
                                     height: parent.height
-                                    color: "#a6e3a1"
+                                    color: Color.success
                                 }
                             }
 
@@ -369,9 +370,9 @@ Item {
 
                                 Text {
                                     text: "SWAP"
-                                    color: "#7f849c"
-                                    font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 14
+                                    color: Color.muted
+                                    font.family: Style.font.family
+                                    font.pixelSize: Style.font.subtitle
                                     font.bold: true
                                     font.letterSpacing: 1.2
                                 }
@@ -381,20 +382,20 @@ Item {
                                     text: root.swapTotalKb > 0
                                         ? root.formatGb(root.swapUsedKb) + " / " + root.formatGb(root.swapTotalKb)
                                         : "none"
-                                    color: "#cdd6f4"
-                                    font.family: "Iosevka Nerd Font"
-                                    font.pixelSize: 14
+                                    color: Color.text
+                                    font.family: Style.font.family
+                                    font.pixelSize: Style.font.subtitle
                                 }
                             }
 
                             Rectangle {
                                 width: parent.width
                                 height: 8
-                                color: "#313244"
+                                color: Color.surface
                                 Rectangle {
                                     width: parent.width * root.swapPercent / 100
                                     height: parent.height
-                                    color: "#f9e2af"
+                                    color: Color.warning
                                 }
                             }
                         }
@@ -405,14 +406,14 @@ Item {
                             columnSpacing: 16
                             rowSpacing: 6
 
-                            Text { text: "TASKS"; color: "#7f849c"; font.family: "Iosevka Nerd Font"; font.pixelSize: 14; font.bold: true; font.letterSpacing: 1.2 }
-                            Text { text: root.taskCount; color: "#cdd6f4"; font.family: "Iosevka Nerd Font"; font.pixelSize: 14; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
-                            Text { text: "THREADS"; color: "#7f849c"; font.family: "Iosevka Nerd Font"; font.pixelSize: 14; font.bold: true; font.letterSpacing: 1.2 }
-                            Text { text: root.threadCount; color: "#cdd6f4"; font.family: "Iosevka Nerd Font"; font.pixelSize: 14; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
-                            Text { text: "LOAD"; color: "#7f849c"; font.family: "Iosevka Nerd Font"; font.pixelSize: 14; font.bold: true; font.letterSpacing: 1.2 }
-                            Text { text: root.load; color: "#cdd6f4"; font.family: "Iosevka Nerd Font"; font.pixelSize: 14; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
-                            Text { text: "UPTIME"; color: "#7f849c"; font.family: "Iosevka Nerd Font"; font.pixelSize: 14; font.bold: true; font.letterSpacing: 1.2 }
-                            Text { text: root.uptime; color: "#cdd6f4"; font.family: "Iosevka Nerd Font"; font.pixelSize: 14; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
+                            Text { text: "TASKS"; color: Color.muted; font.family: Style.font.family; font.pixelSize: Style.font.subtitle; font.bold: true; font.letterSpacing: 1.2 }
+                            Text { text: root.taskCount; color: Color.text; font.family: Style.font.family; font.pixelSize: Style.font.subtitle; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
+                            Text { text: "THREADS"; color: Color.muted; font.family: Style.font.family; font.pixelSize: Style.font.subtitle; font.bold: true; font.letterSpacing: 1.2 }
+                            Text { text: root.threadCount; color: Color.text; font.family: Style.font.family; font.pixelSize: Style.font.subtitle; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
+                            Text { text: "LOAD"; color: Color.muted; font.family: Style.font.family; font.pixelSize: Style.font.subtitle; font.bold: true; font.letterSpacing: 1.2 }
+                            Text { text: root.load; color: Color.text; font.family: Style.font.family; font.pixelSize: Style.font.subtitle; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
+                            Text { text: "UPTIME"; color: Color.muted; font.family: Style.font.family; font.pixelSize: Style.font.subtitle; font.bold: true; font.letterSpacing: 1.2 }
+                            Text { text: root.uptime; color: Color.text; font.family: Style.font.family; font.pixelSize: Style.font.subtitle; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
                         }
                     }
                 }
