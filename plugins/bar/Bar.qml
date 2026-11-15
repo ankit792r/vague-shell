@@ -11,6 +11,7 @@ Item {
         ],
         center: [
             { id: "clock" },
+            { id: "media" },
         ],
         right: [
             { id: "volume" },
@@ -28,6 +29,7 @@ Item {
     function moduleFor(id) {
         if (id === "workspace") return workspaceComponent
         if (id === "clock") return clockComponent
+        if (id === "media") return mediaComponent
         if (id === "volume") return volumeComponent
         if (id === "brightness") return brightnessComponent
         if (id === "network") return networkComponent
@@ -42,6 +44,7 @@ Item {
     Component { id: workspaceComponent; Workspace {} }
     Component { id: clockComponent; Clock {} }
 
+    Component { id: mediaComponent; Media {} }
     Component { id: volumeComponent; Volume {} }
     Component { id: brightnessComponent; Brightness {} }
     Component { id: networkComponent; Network {} }
