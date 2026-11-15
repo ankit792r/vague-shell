@@ -79,7 +79,7 @@ Item {
                         return icon.mapToItem(window.contentItem, 0, 0)
                     }
 
-                    width: 360
+                    width: 440
                     height: column.implicitHeight + 28
                     color: "#1e1e2e"
                     border.color: "#45475a"
@@ -115,6 +115,7 @@ Item {
 
                             Repeater {
                                 model: [
+                                    { icon: "󰌾", label: "Lock", command: ["qs", "ipc", "call", "lock", "lock"] },
                                     { icon: "󰍃", label: "Log out", command: ["niri", "msg", "action", "quit"] },
                                     { icon: "󰒲", label: "Suspend", command: ["systemctl", "suspend"] },
                                     { icon: "󰜉", label: "Reboot", command: ["systemctl", "reboot"] },
@@ -123,7 +124,7 @@ Item {
 
                                 delegate: Rectangle {
                                     required property var modelData
-                                    width: (parent.width - 24) / 4
+                                    width: (parent.width - 32) / 5
                                     height: 64
                                     color: actionMouse.containsMouse ? "#313244" : "transparent"
                                     border.color: modelData.label === "Power off" ? "#f38ba8" : "#45475a"
