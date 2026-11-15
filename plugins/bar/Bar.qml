@@ -21,6 +21,7 @@ Item {
             { id: "system" },
             { id: "battery" },
             { id: "tray" },
+            { id: "clipboard" },
             { id: "desktop" },
         ]
     })
@@ -37,6 +38,7 @@ Item {
         if (id === "battery") return batteryComponent
         if (id === "system") return systemComponent
         if (id === "tray") return trayComponent
+        if (id === "clipboard") return clipboardComponent
         if (id === "desktop") return desktopComponent
         return null
     }
@@ -52,6 +54,7 @@ Item {
     Component { id: batteryComponent; Battery {} }
     Component { id: systemComponent; System {} }
     Component { id: trayComponent; Tray {} }
+    Component { id: clipboardComponent; Clipboard {} }
     Component { id: desktopComponent; Desktop {} }
 
     Variants {

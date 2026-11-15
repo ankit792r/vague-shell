@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import "plugins/bar"
+import "plugins/clipboard"
 
 ShellRoot {
     id: shell
@@ -17,4 +18,6 @@ ShellRoot {
         active: shell.activeBarId === shell.defaultBarId
         sourceComponent: defaultBarComponent
     }
+
+    Clipboard {}
 }
