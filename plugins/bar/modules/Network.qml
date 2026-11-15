@@ -3,8 +3,8 @@ import QtQuick.Controls
 import Quickshell
 import Quickshell.Io
 import Quickshell.Networking
-import Quickshell.Wayland
 import "../../../Commons"
+import "../../../Ui"
 
 Item {
     id: root
@@ -171,170 +171,33 @@ Item {
         }
     }
 
-    Row {
+    BarButton {
         id: row
-        anchors.verticalCenter: parent.verticalCenter
-        spacing: 4
-
-        Text {
-            anchors.verticalCenter: parent.verticalCenter
-            text: root.kind === "ethernet" ? "󰈀" : (root.kind === "wifi" ? "󰤨" : "󰤮")
-            color: Color.text
-            font.family: Style.font.family
-            font.pixelSize: Style.font.heading
-        }
-
-        Text {
-            anchors.verticalCenter: parent.verticalCenter
-            width: Math.min(implicitWidth, 200)
-            elide: Text.ElideRight
-            text: root.name
-            color: Color.text
-            font.family: Style.font.family
-            font.pixelSize: Style.font.heading
-        }
-    }
-
-    MouseArea {
-        anchors.fill: parent
+        icon: root.kind === "ethernet" ? "󰈀" : (root.kind === "wifi" ? "󰤨" : "󰤮")
+        label: root.name
+        labelMaxWidth: 200
         onClicked: root.opened = !root.opened
     }
 
     Loader {
         active: root.opened
-        sourceComponent: panelComponent
-    }
+        sourceComponent: PanelPopup {
+            anchorItem: row
+            panelNamespace: "network-panel"
+            cardWidth: 380
+            cardSpacing: 12
+            onDismissed: root.opened = false
 
-    Component {
-        id: panelComponent
-
-        Item {
-            PanelWindow {
-                id: overlay
-
-                screen: row.QsWindow.window ? row.QsWindow.window.screen : null
-                color: "transparent"
-                exclusionMode: ExclusionMode.Ignore
-                aboveWindows: true
-                focusable: true
-                WlrLayershell.namespace: "network-panel"
-                WlrLayershell.layer: WlrLayer.Overlay
-                WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
-
-                anchors {
-                    top: true
-                    bottom: true
-                    left: true
-                    right: true
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    acceptedButtons: Qt.AllButtons
-                    onClicked: root.opened = false
-                }
-
-                Rectangle {
-                    id: card
-
-                    readonly property real screenW: overlay.screen ? overlay.screen.width : 1920
-                    readonly property point anchor: {
-                        var window = row.QsWindow.window
-                        if (!window) return Qt.point(8, 40)
-                        return row.mapToItem(window.contentItem, 0, 0)
-                    }
-
-                    width: 380
-                    height: column.implicitHeight + 28
-                    // radius: 18
-                    color: Color.background
-                    border.color: Color.border
-                    border.width: 2
-                    x: Math.max(8, Math.min(anchor.x + row.width / 2 - width / 2, screenW - width - 8))
-                    y: 40
-
-                    MouseArea {
-                        anchors.fill: parent
-                        acceptedButtons: Qt.AllButtons
-                    }
-
-                    Column {
-                        id: column
-                        z: 1
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.top: parent.top
-                        anchors.margins: 14
-                        spacing: 12
-
-                        Item {
-                            width: parent.width
-                            height: 42
-
-                            Text {
-                                id: heroIcon
-                                anchors.left: parent.left
-                                anchors.verticalCenter: parent.verticalCenter
-                                text: root.kind === "ethernet" ? "󰈀" : (Networking.wifiEnabled ? "󰤨" : "󰤮")
-                                color: Color.text
-                                font.family: Style.font.family
-                                font.pixelSize: Style.font.displayLarge
-                            }
-
-                            Column {
-                                anchors.left: heroIcon.right
-                                anchors.leftMargin: 14
-                                anchors.right: power.left
-                                anchors.rightMargin: 12
-                                anchors.verticalCenter: parent.verticalCenter
-                                spacing: 2
-
-                                Text {
-                                    width: parent.width
-                                    text: root.name
-                                    color: Color.text
-                                    font.family: Style.font.family
-                                    font.pixelSize: Style.font.heading
-                                    font.bold: true
-                                    elide: Text.ElideRight
-                                }
-
-                                Text {
-                                    width: parent.width
-                                    text: root.statusLine
-                                    color: Color.muted
-                                    font.family: Style.font.family
-                                    font.pixelSize: Style.font.caption
-                                    font.bold: true
-                                    font.letterSpacing: 1.2
-                                    elide: Text.ElideRight
-                                }
-                            }
-
-                            Rectangle {
-                                id: power
-                                anchors.right: parent.right
-                                anchors.verticalCenter: parent.verticalCenter
-                                width: 36
-                                height: 20
-                                // radius: 10
-                                color: Networking.wifiEnabled ? Color.success : Color.border
-
-                                Rectangle {
-                                    width: 16
-                                    height: 16
-                                    // radius: 8
-                                    color: Color.background
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    x: Networking.wifiEnabled ? parent.width - width - 2 : 2
-                                }
-
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onClicked: Networking.wifiEnabled = !Networking.wifiEnabled
-                                }
-                            }
-                        }
+                        PanelHero {
+    icon: root.kind === "ethernet" ? "󰈀" : (Networking.wifiEnabled ? "󰤨" : "󰤮")
+    title: root.name
+    subtitle: root.statusLine
+ToggleSwitch {
+    id: power
+    checked: Networking.wifiEnabled
+    onToggled: Networking.wifiEnabled = !Networking.wifiEnabled
+}
+}
 
                         TextField {
                             visible: root.passwordFor !== ""
@@ -348,13 +211,8 @@ Item {
                             onAccepted: if (root.passwordText !== "") connectWithPassword.running = true
                         }
 
-                        Text {
+                        SectionLabel {
                             text: "WI-FI"
-                            color: Color.muted
-                            font.family: Style.font.family
-                            font.pixelSize: Style.font.caption
-                            font.bold: true
-                            font.letterSpacing: 1.2
                         }
 
                         ListView {
@@ -378,13 +236,12 @@ Item {
                                     anchors.rightMargin: 8
                                     spacing: 10
 
-                                    Text {
+                                    IconText {
                                         anchors.verticalCenter: parent.verticalCenter
                                         width: 22
                                         text: root.bars(modelData.signal)
                                         color: modelData.connected ? Color.text : Color.muted
-                                        font.family: Style.font.family
-                                        font.pixelSize: Style.font.heading
+                                        size: Style.font.heading
                                         horizontalAlignment: Text.AlignHCenter
                                     }
 
@@ -393,33 +250,29 @@ Item {
                                         width: parent.width - 22 - lockGlyph.width - parent.spacing * 2
                                         spacing: 1
 
-                                        Text {
+                                        IconText {
                                             width: parent.width
                                             text: modelData.ssid
-                                            color: Color.text
-                                            font.family: Style.font.family
-                                            font.pixelSize: Style.font.subtitle
+                                            size: Style.font.subtitle
                                             elide: Text.ElideRight
                                         }
 
-                                        Text {
+                                        IconText {
                                             visible: modelData.connected
                                             width: parent.width
                                             text: "Connected"
                                             color: Color.subtext
-                                            font.family: Style.font.family
-                                            font.pixelSize: Style.font.caption
+                                            size: Style.font.caption
                                             elide: Text.ElideRight
                                         }
                                     }
 
-                                    Text {
+                                    IconText {
                                         id: lockGlyph
                                         anchors.verticalCenter: parent.verticalCenter
                                         text: modelData.secure ? "󰌾" : ""
                                         color: Color.muted
-                                        font.family: Style.font.family
-                                        font.pixelSize: Style.font.subtitle
+                                        size: Style.font.subtitle
                                     }
                                 }
 
@@ -432,37 +285,6 @@ Item {
                                 }
                             }
                         }
-                    }
-                }
-            }
-
-            Variants {
-                model: Quickshell.screens
-
-                delegate: PanelWindow {
-                    required property var modelData
-
-                    screen: modelData
-                    visible: overlay.screen && modelData.name !== overlay.screen.name
-                    color: "transparent"
-                    exclusionMode: ExclusionMode.Ignore
-                    WlrLayershell.namespace: "network-panel-dismiss"
-                    WlrLayershell.layer: WlrLayer.Overlay
-                    WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
-
-                    anchors {
-                        top: true
-                        bottom: true
-                        left: true
-                        right: true
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: root.opened = false
-                    }
-                }
-            }
         }
     }
 }

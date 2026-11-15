@@ -2,8 +2,8 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
-import Quickshell.Wayland
 import "../../../Commons"
+import "../../../Ui"
 
 Item {
     id: root
@@ -175,37 +175,29 @@ Item {
 
         Row {
             spacing: 6
-            Text {
+            IconText {
                 anchors.verticalCenter: parent.verticalCenter
                 text: ""
-                color: Color.text
-                font.family: Style.font.family
-                font.pixelSize: Style.font.heading
+                size: Style.font.heading
             }
-            Text {
+            IconText {
                 anchors.verticalCenter: parent.verticalCenter
                 text: root.cpu + "%"
-                color: Color.text
-                font.family: Style.font.family
-                font.pixelSize: Style.font.heading
+                size: Style.font.heading
             }
         }
 
         Row {
             spacing: 6
-            Text {
+            IconText {
                 anchors.verticalCenter: parent.verticalCenter
                 text: ""
-                color: Color.text
-                font.family: Style.font.family
-                font.pixelSize: Style.font.heading
+                size: Style.font.heading
             }
-            Text {
+            IconText {
                 anchors.verticalCenter: parent.verticalCenter
                 text: root.formatGb(root.memUsedKb)
-                color: Color.text
-                font.family: Style.font.family
-                font.pixelSize: Style.font.heading
+                size: Style.font.heading
             }
         }
     }
@@ -217,75 +209,16 @@ Item {
 
     Loader {
         active: root.opened
-        sourceComponent: panelComponent
-    }
+        sourceComponent: PanelPopup {
+            anchorItem: row
+            panelNamespace: "system-panel"
+            cardWidth: 460
+            cardSpacing: 12
+            onDismissed: root.opened = false
 
-    Component {
-        id: panelComponent
-
-        Item {
-            PanelWindow {
-                id: overlay
-
-                screen: row.QsWindow.window ? row.QsWindow.window.screen : null
-                color: "transparent"
-                exclusionMode: ExclusionMode.Ignore
-                aboveWindows: true
-                focusable: true
-                WlrLayershell.namespace: "system-panel"
-                WlrLayershell.layer: WlrLayer.Overlay
-                WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
-
-                anchors {
-                    top: true
-                    bottom: true
-                    left: true
-                    right: true
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    acceptedButtons: Qt.AllButtons
-                    onClicked: root.opened = false
-                }
-
-                Rectangle {
-                    id: card
-
-                    readonly property real screenW: overlay.screen ? overlay.screen.width : 1920
-                    readonly property point anchor: {
-                        var window = row.QsWindow.window
-                        if (!window) return Qt.point(8, 40)
-                        return row.mapToItem(window.contentItem, 0, 0)
-                    }
-
-                    width: 460
-                    height: column.implicitHeight + 28
-                    color: Color.background
-                    border.color: Color.border
-                    border.width: 2
-                    x: Math.max(8, Math.min(anchor.x + row.width / 2 - width / 2, screenW - width - 8))
-                    y: 40
-
-                    MouseArea {
-                        anchors.fill: parent
-                        acceptedButtons: Qt.AllButtons
-                    }
-
-                    Column {
-                        id: column
-                        z: 1
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.top: parent.top
-                        anchors.margins: 14
-                        spacing: 12
-
-                        Text {
+                        IconText {
                             text: "System"
-                            color: Color.text
-                            font.family: Style.font.family
-                            font.pixelSize: Style.font.iconLarge
+                            size: Style.font.iconLarge
                             font.bold: true
                         }
 
@@ -297,21 +230,18 @@ Item {
                                 width: parent.width
                                 height: 16
 
-                                Text {
+                                IconText {
                                     text: "CPU"
                                     color: Color.muted
-                                    font.family: Style.font.family
-                                    font.pixelSize: Style.font.subtitle
+                                    size: Style.font.subtitle
                                     font.bold: true
                                     font.letterSpacing: 1.2
                                 }
 
-                                Text {
+                                IconText {
                                     anchors.right: parent.right
                                     text: root.cpu + "%"
-                                    color: Color.text
-                                    font.family: Style.font.family
-                                    font.pixelSize: Style.font.subtitle
+                                    size: Style.font.subtitle
                                 }
                             }
 
@@ -335,21 +265,18 @@ Item {
                                 width: parent.width
                                 height: 16
 
-                                Text {
+                                IconText {
                                     text: "MEM"
                                     color: Color.muted
-                                    font.family: Style.font.family
-                                    font.pixelSize: Style.font.subtitle
+                                    size: Style.font.subtitle
                                     font.bold: true
                                     font.letterSpacing: 1.2
                                 }
 
-                                Text {
+                                IconText {
                                     anchors.right: parent.right
                                     text: root.formatGb(root.memUsedKb) + " / " + root.formatGb(root.memTotalKb)
-                                    color: Color.text
-                                    font.family: Style.font.family
-                                    font.pixelSize: Style.font.subtitle
+                                    size: Style.font.subtitle
                                 }
                             }
 
@@ -368,23 +295,20 @@ Item {
                                 width: parent.width
                                 height: 16
 
-                                Text {
+                                IconText {
                                     text: "SWAP"
                                     color: Color.muted
-                                    font.family: Style.font.family
-                                    font.pixelSize: Style.font.subtitle
+                                    size: Style.font.subtitle
                                     font.bold: true
                                     font.letterSpacing: 1.2
                                 }
 
-                                Text {
+                                IconText {
                                     anchors.right: parent.right
                                     text: root.swapTotalKb > 0
                                         ? root.formatGb(root.swapUsedKb) + " / " + root.formatGb(root.swapTotalKb)
                                         : "none"
-                                    color: Color.text
-                                    font.family: Style.font.family
-                                    font.pixelSize: Style.font.subtitle
+                                    size: Style.font.subtitle
                                 }
                             }
 
@@ -406,46 +330,15 @@ Item {
                             columnSpacing: 16
                             rowSpacing: 6
 
-                            Text { text: "TASKS"; color: Color.muted; font.family: Style.font.family; font.pixelSize: Style.font.subtitle; font.bold: true; font.letterSpacing: 1.2 }
-                            Text { text: root.taskCount; color: Color.text; font.family: Style.font.family; font.pixelSize: Style.font.subtitle; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
-                            Text { text: "THREADS"; color: Color.muted; font.family: Style.font.family; font.pixelSize: Style.font.subtitle; font.bold: true; font.letterSpacing: 1.2 }
-                            Text { text: root.threadCount; color: Color.text; font.family: Style.font.family; font.pixelSize: Style.font.subtitle; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
-                            Text { text: "LOAD"; color: Color.muted; font.family: Style.font.family; font.pixelSize: Style.font.subtitle; font.bold: true; font.letterSpacing: 1.2 }
-                            Text { text: root.load; color: Color.text; font.family: Style.font.family; font.pixelSize: Style.font.subtitle; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
-                            Text { text: "UPTIME"; color: Color.muted; font.family: Style.font.family; font.pixelSize: Style.font.subtitle; font.bold: true; font.letterSpacing: 1.2 }
-                            Text { text: root.uptime; color: Color.text; font.family: Style.font.family; font.pixelSize: Style.font.subtitle; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
+                            IconText { text: "TASKS"; color: Color.muted; size: Style.font.subtitle; font.bold: true; font.letterSpacing: 1.2 }
+                            IconText { text: root.taskCount; size: Style.font.subtitle; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
+                            IconText { text: "THREADS"; color: Color.muted; size: Style.font.subtitle; font.bold: true; font.letterSpacing: 1.2 }
+                            IconText { text: root.threadCount; size: Style.font.subtitle; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
+                            IconText { text: "LOAD"; color: Color.muted; size: Style.font.subtitle; font.bold: true; font.letterSpacing: 1.2 }
+                            IconText { text: root.load; size: Style.font.subtitle; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
+                            IconText { text: "UPTIME"; color: Color.muted; size: Style.font.subtitle; font.bold: true; font.letterSpacing: 1.2 }
+                            IconText { text: root.uptime; size: Style.font.subtitle; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
                         }
-                    }
-                }
-            }
-
-            Variants {
-                model: Quickshell.screens
-
-                delegate: PanelWindow {
-                    required property var modelData
-
-                    screen: modelData
-                    visible: overlay.screen && modelData.name !== overlay.screen.name
-                    color: "transparent"
-                    exclusionMode: ExclusionMode.Ignore
-                    WlrLayershell.namespace: "system-panel-dismiss"
-                    WlrLayershell.layer: WlrLayer.Overlay
-                    WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
-
-                    anchors {
-                        top: true
-                        bottom: true
-                        left: true
-                        right: true
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: root.opened = false
-                    }
-                }
-            }
         }
     }
 }

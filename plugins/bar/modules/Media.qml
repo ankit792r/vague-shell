@@ -1,8 +1,8 @@
 import QtQuick
 import Quickshell
 import Quickshell.Services.Mpris
-import Quickshell.Wayland
 import "../../../Commons"
+import "../../../Ui"
 
 Item {
     id: root
@@ -91,102 +91,27 @@ Item {
         onTriggered: root.choose()
     }
 
-    Row {
+    BarButton {
         id: row
-        anchors.verticalCenter: parent.verticalCenter
-        spacing: 6
         visible: root.hasMedia
-
-        Text {
-            anchors.verticalCenter: parent.verticalCenter
-            text: root.active && root.active.isPlaying ? "󰏤" : "󰐊"
-            color: Color.text
-            font.family: Style.font.family
-            font.pixelSize: Style.font.heading
-        }
-
-        Text {
-            anchors.verticalCenter: parent.verticalCenter
-            width: Math.min(implicitWidth, 180)
-            text: root.title + (root.artist ? "  ·  " + root.artist : "")
-            color: Color.text
-            font.family: Style.font.family
-            font.pixelSize: Style.font.subtitle
-            elide: Text.ElideRight
-        }
-    }
-
-    MouseArea {
-        anchors.fill: parent
-        acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
-        onClicked: function (mouse) {
-            if (!root.active) return
-            if (mouse.button === Qt.RightButton) root.opened = !root.opened
-            else if (mouse.button === Qt.MiddleButton) root.act("next")
-            else root.act("toggle")
-        }
-        onWheel: function (wheel) {
-            root.act(wheel.angleDelta.y > 0 ? "previous" : "next")
-        }
+        icon: root.active && root.active.isPlaying ? "󰏤" : "󰐊"
+        label: root.title + (root.artist ? "  ·  " + root.artist : "")
+        labelSize: Style.font.subtitle
+        labelMaxWidth: 180
+        onClicked: if (root.active) root.act("toggle")
+        onRightClicked: if (root.active) root.opened = !root.opened
+        onMiddleClicked: if (root.active) root.act("next")
+        onWheeled: function (delta) { root.act(delta > 0 ? "previous" : "next") }
     }
 
     Loader {
         active: root.opened && root.hasMedia
-        sourceComponent: panelComponent
-    }
-
-    Component {
-        id: panelComponent
-
-        Item {
-            PanelWindow {
-                id: overlay
-
-                screen: row.QsWindow.window ? row.QsWindow.window.screen : null
-                color: "transparent"
-                exclusionMode: ExclusionMode.Ignore
-                aboveWindows: true
-                focusable: true
-                WlrLayershell.namespace: "media-panel"
-                WlrLayershell.layer: WlrLayer.Overlay
-                WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
-
-                anchors { top: true; bottom: true; left: true; right: true }
-
-                MouseArea {
-                    anchors.fill: parent
-                    acceptedButtons: Qt.AllButtons
-                    onClicked: root.opened = false
-                }
-
-                Rectangle {
-                    id: card
-
-                    readonly property real screenW: overlay.screen ? overlay.screen.width : 1920
-                    readonly property point anchor: {
-                        var window = row.QsWindow.window
-                        if (!window) return Qt.point(8, 40)
-                        return row.mapToItem(window.contentItem, 0, 0)
-                    }
-
-                    width: 340
-                    height: column.implicitHeight + 28
-                    color: Color.background
-                    border.color: Color.border
-                    border.width: 2
-                    x: Math.max(8, Math.min(anchor.x + row.width / 2 - width / 2, screenW - width - 8))
-                    y: 40
-
-                    MouseArea { anchors.fill: parent; acceptedButtons: Qt.AllButtons }
-
-                    Column {
-                        id: column
-                        z: 1
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.top: parent.top
-                        anchors.margins: 14
-                        spacing: 12
+        sourceComponent: PanelPopup {
+            anchorItem: row
+            panelNamespace: "media-panel"
+            cardWidth: 340
+            cardSpacing: 12
+            onDismissed: root.opened = false
 
                         Row {
                             width: parent.width
@@ -206,13 +131,11 @@ Item {
                                     visible: status === Image.Ready
                                 }
 
-                                Text {
+                                IconText {
                                     anchors.centerIn: parent
                                     visible: !parent.children[0].visible
                                     text: "󰝚"
-                                    color: Color.text
-                                    font.family: Style.font.family
-                                    font.pixelSize: Style.font.displayLarge
+                                    size: Style.font.displayLarge
                                 }
                             }
 
@@ -221,30 +144,26 @@ Item {
                                 spacing: 2
                                 anchors.verticalCenter: parent.verticalCenter
 
-                                Text {
+                                IconText {
                                     width: parent.width
                                     text: root.title || "Nothing playing"
-                                    color: Color.text
-                                    font.family: Style.font.family
-                                    font.pixelSize: Style.font.title
+                                    size: Style.font.title
                                     font.bold: true
                                     elide: Text.ElideRight
                                 }
-                                Text {
+                                IconText {
                                     width: parent.width
                                     text: root.artist
                                     color: Color.subtext
-                                    font.family: Style.font.family
-                                    font.pixelSize: Style.font.body
+                                    size: Style.font.body
                                     elide: Text.ElideRight
                                     visible: text !== ""
                                 }
-                                Text {
+                                IconText {
                                     width: parent.width
                                     text: root.active && root.active.trackAlbum ? root.active.trackAlbum : ""
                                     color: Color.muted
-                                    font.family: Style.font.family
-                                    font.pixelSize: Style.font.bodySmall
+                                    size: Style.font.bodySmall
                                     elide: Text.ElideRight
                                     visible: text !== ""
                                 }
@@ -277,18 +196,16 @@ Item {
                             width: parent.width
                             height: visible ? 14 : 0
 
-                            Text {
+                            IconText {
                                 text: root.active ? root.clock(root.active.position) : ""
                                 color: Color.muted
-                                font.family: Style.font.family
-                                font.pixelSize: Style.font.caption
+                                size: Style.font.caption
                             }
-                            Text {
+                            IconText {
                                 anchors.right: parent.right
                                 text: root.active ? root.clock(root.active.length) : ""
                                 color: Color.muted
-                                font.family: Style.font.family
-                                font.pixelSize: Style.font.caption
+                                size: Style.font.caption
                             }
                         }
 
@@ -296,25 +213,21 @@ Item {
                             anchors.horizontalCenter: parent.horizontalCenter
                             spacing: 18
 
-                            Text {
+                            IconText {
                                 text: "󰒮"
                                 color: root.active && root.active.canGoPrevious ? Color.text : Color.border
-                                font.family: Style.font.family
-                                font.pixelSize: Style.font.displaySmall
+                                size: Style.font.displaySmall
                                 MouseArea { anchors.fill: parent; onClicked: root.act("previous") }
                             }
-                            Text {
+                            IconText {
                                 text: root.active && root.active.isPlaying ? "󰏤" : "󰐊"
-                                color: Color.text
-                                font.family: Style.font.family
-                                font.pixelSize: Style.font.display
+                                size: Style.font.display
                                 MouseArea { anchors.fill: parent; onClicked: root.act("toggle") }
                             }
-                            Text {
+                            IconText {
                                 text: "󰒭"
                                 color: root.active && root.active.canGoNext ? Color.text : Color.border
-                                font.family: Style.font.family
-                                font.pixelSize: Style.font.displaySmall
+                                size: Style.font.displaySmall
                                 MouseArea { anchors.fill: parent; onClicked: root.act("next") }
                             }
                         }
@@ -340,20 +253,17 @@ Item {
                                         anchors.right: parent.right
                                         anchors.rightMargin: 8
 
-                                        Text {
+                                        IconText {
                                             width: parent.width
                                             text: modelData.title
-                                            color: Color.text
-                                            font.family: Style.font.family
-                                            font.pixelSize: Style.font.body
+                                            size: Style.font.body
                                             elide: Text.ElideRight
                                         }
-                                        Text {
+                                        IconText {
                                             width: parent.width
                                             text: modelData.artist
                                             color: Color.muted
-                                            font.family: Style.font.family
-                                            font.pixelSize: Style.font.caption
+                                            size: Style.font.caption
                                             elide: Text.ElideRight
                                             visible: text !== ""
                                         }
@@ -369,26 +279,6 @@ Item {
                                 }
                             }
                         }
-                    }
-                }
-            }
-
-            Variants {
-                model: Quickshell.screens
-
-                delegate: PanelWindow {
-                    required property var modelData
-                    screen: modelData
-                    visible: overlay.screen && modelData.name !== overlay.screen.name
-                    color: "transparent"
-                    exclusionMode: ExclusionMode.Ignore
-                    WlrLayershell.namespace: "media-panel-dismiss"
-                    WlrLayershell.layer: WlrLayer.Overlay
-                    WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
-                    anchors { top: true; bottom: true; left: true; right: true }
-                    MouseArea { anchors.fill: parent; onClicked: root.opened = false }
-                }
-            }
         }
     }
 }

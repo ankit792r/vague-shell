@@ -1,7 +1,7 @@
 import QtQuick
 import Quickshell
-import Quickshell.Wayland
 import "../../../Commons"
+import "../../../Ui"
 
 Item {
     id: root
@@ -18,95 +18,24 @@ Item {
         opened = false
     }
 
-    Text {
+    BarButton {
         id: icon
-        anchors.verticalCenter: parent.verticalCenter
-        width: Math.max(implicitWidth, 18)
-        height: 32
-        text: ""
-        color: Color.text
-        font.family: Style.font.family
-        font.pixelSize: Style.font.heading
-        verticalAlignment: Text.AlignVCenter
-        horizontalAlignment: Text.AlignHCenter
-    }
-
-    MouseArea {
-        anchors.fill: parent
+        icon: ""
         onClicked: root.opened = !root.opened
     }
 
     Loader {
         active: root.opened
-        sourceComponent: panelComponent
-    }
+        sourceComponent: PanelPopup {
+            anchorItem: icon
+            panelNamespace: "desktop-panel"
+            cardWidth: 440
+            cardSpacing: 10
+            onDismissed: root.opened = false
 
-    Component {
-        id: panelComponent
-
-        Item {
-            PanelWindow {
-                id: overlay
-
-                screen: icon.QsWindow.window ? icon.QsWindow.window.screen : null
-                color: "transparent"
-                exclusionMode: ExclusionMode.Ignore
-                aboveWindows: true
-                focusable: true
-                WlrLayershell.namespace: "desktop-panel"
-                WlrLayershell.layer: WlrLayer.Overlay
-                WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
-
-                anchors {
-                    top: true
-                    bottom: true
-                    left: true
-                    right: true
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    acceptedButtons: Qt.AllButtons
-                    onClicked: root.opened = false
-                }
-
-                Rectangle {
-                    id: card
-
-                    readonly property real screenW: overlay.screen ? overlay.screen.width : 1920
-                    readonly property point anchor: {
-                        var window = icon.QsWindow.window
-                        if (!window) return Qt.point(8, 40)
-                        return icon.mapToItem(window.contentItem, 0, 0)
-                    }
-
-                    width: 440
-                    height: column.implicitHeight + 28
-                    color: Color.background
-                    border.color: Color.border
-                    border.width: 2
-                    x: Math.max(8, Math.min(anchor.x + icon.width / 2 - width / 2, screenW - width - 8))
-                    y: 40
-
-                    MouseArea {
-                        anchors.fill: parent
-                        acceptedButtons: Qt.AllButtons
-                    }
-
-                    Column {
-                        id: column
-                        z: 1
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.top: parent.top
-                        anchors.margins: 14
-                        spacing: 10
-
-                        Text {
+                        IconText {
                             text: "Session"
-                            color: Color.text
-                            font.family: Style.font.family
-                            font.pixelSize: Style.font.heading
+                            size: Style.font.heading
                             font.bold: true
                         }
 
@@ -135,20 +64,18 @@ Item {
                                         anchors.centerIn: parent
                                         spacing: 4
 
-                                        Text {
+                                        IconText {
                                             anchors.horizontalCenter: parent.horizontalCenter
                                             text: modelData.icon
                                             color: modelData.label === "Power off" ? Color.urgent : Color.text
-                                            font.family: Style.font.family
-                                            font.pixelSize: Style.font.iconLarge
+                                            size: Style.font.iconLarge
                                         }
 
-                                        Text {
+                                        IconText {
                                             anchors.horizontalCenter: parent.horizontalCenter
                                             text: modelData.label
                                             color: modelData.label === "Power off" ? Color.urgent : Color.text
-                                            font.family: Style.font.family
-                                            font.pixelSize: Style.font.caption
+                                            size: Style.font.caption
                                         }
                                     }
 
@@ -177,20 +104,16 @@ Item {
                                     anchors.centerIn: parent
                                     spacing: 8
 
-                                    Text {
+                                    IconText {
                                         anchors.verticalCenter: parent.verticalCenter
                                         text: "󰂛"
-                                        color: Color.text
-                                        font.family: Style.font.family
-                                        font.pixelSize: Style.font.heading
+                                        size: Style.font.heading
                                     }
 
-                                    Text {
+                                    IconText {
                                         anchors.verticalCenter: parent.verticalCenter
                                         text: "DND"
-                                        color: Color.text
-                                        font.family: Style.font.family
-                                        font.pixelSize: Style.font.body
+                                        size: Style.font.body
                                     }
                                 }
 
@@ -211,20 +134,18 @@ Item {
                                     anchors.centerIn: parent
                                     spacing: 8
 
-                                    Text {
+                                    IconText {
                                         anchors.verticalCenter: parent.verticalCenter
                                         text: "󰖔"
                                         color: root.nightLight ? Color.warning : Color.text
-                                        font.family: Style.font.family
-                                        font.pixelSize: Style.font.heading
+                                        size: Style.font.heading
                                     }
 
-                                    Text {
+                                    IconText {
                                         anchors.verticalCenter: parent.verticalCenter
                                         text: "Night light"
                                         color: root.nightLight ? Color.warning : Color.text
-                                        font.family: Style.font.family
-                                        font.pixelSize: Style.font.body
+                                        size: Style.font.body
                                     }
                                 }
 
@@ -239,37 +160,6 @@ Item {
                                 }
                             }
                         }
-                    }
-                }
-            }
-
-            Variants {
-                model: Quickshell.screens
-
-                delegate: PanelWindow {
-                    required property var modelData
-
-                    screen: modelData
-                    visible: overlay.screen && modelData.name !== overlay.screen.name
-                    color: "transparent"
-                    exclusionMode: ExclusionMode.Ignore
-                    WlrLayershell.namespace: "desktop-panel-dismiss"
-                    WlrLayershell.layer: WlrLayer.Overlay
-                    WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
-
-                    anchors {
-                        top: true
-                        bottom: true
-                        left: true
-                        right: true
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: root.opened = false
-                    }
-                }
-            }
         }
     }
 }

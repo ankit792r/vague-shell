@@ -1,7 +1,7 @@
 import QtQuick
 import Quickshell
-import Quickshell.Wayland
 import "../../../Commons"
+import "../../../Ui"
 
 Item {
     id: root
@@ -57,102 +57,32 @@ Item {
         viewMonth = clock.date.getMonth()
     }
 
-    Text {
+    BarButton {
         id: label
-        anchors.verticalCenter: parent.verticalCenter
-        text: Qt.formatDateTime(clock.date, "ddd HH:mm")
-        color: Color.text
-        font.family: Style.font.family
-        font.pixelSize: Style.font.heading
-    }
-
-    MouseArea {
-        anchors.fill: parent
+        label: Qt.formatDateTime(clock.date, "ddd HH:mm")
         onClicked: root.opened = !root.opened
-        onWheel: function (wheel) {
-            if (root.opened) root.moveMonth(wheel.angleDelta.y > 0 ? -1 : 1)
-        }
+        onWheeled: function (delta) { if (root.opened) root.moveMonth(delta > 0 ? -1 : 1) }
     }
 
     Loader {
         active: root.opened
-        sourceComponent: panelComponent
-    }
-
-    Component {
-        id: panelComponent
-
-        Item {
-            PanelWindow {
-                id: overlay
-
-                screen: label.QsWindow.window ? label.QsWindow.window.screen : null
-                color: "transparent"
-                exclusionMode: ExclusionMode.Ignore
-                aboveWindows: true
-                focusable: true
-                WlrLayershell.namespace: "clock-panel"
-                WlrLayershell.layer: WlrLayer.Overlay
-                WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
-
-                anchors {
-                    top: true
-                    bottom: true
-                    left: true
-                    right: true
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    acceptedButtons: Qt.AllButtons
-                    onClicked: root.opened = false
-                    onWheel: function (wheel) { root.moveMonth(wheel.angleDelta.y > 0 ? -1 : 1) }
-                }
-
-                Rectangle {
-                    id: card
-
-                    readonly property real screenW: overlay.screen ? overlay.screen.width : 1920
-                    readonly property point anchor: {
-                        var window = label.QsWindow.window
-                        if (!window) return Qt.point(8, 40)
-                        return label.mapToItem(window.contentItem, 0, 0)
-                    }
-
-                    width: 308
-                    height: column.implicitHeight + 28
-                    color: Color.background
-                    border.color: Color.border
-                    border.width: 2
-                    x: Math.max(8, Math.min(anchor.x + label.width / 2 - width / 2, screenW - width - 8))
-                    y: 40
-
-                    MouseArea {
-                        anchors.fill: parent
-                        acceptedButtons: Qt.AllButtons
-                        onWheel: function (wheel) { root.moveMonth(wheel.angleDelta.y > 0 ? -1 : 1) }
-                    }
-
-                    Column {
-                        id: column
-                        z: 1
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.top: parent.top
-                        anchors.margins: 14
-                        spacing: 12
+        sourceComponent: PanelPopup {
+            anchorItem: label
+            panelNamespace: "clock-panel"
+            cardWidth: 308
+            cardSpacing: 12
+            onDismissed: root.opened = false
+            onWheeled: function (delta) { root.moveMonth(delta > 0 ? -1 : 1) }
 
                         Item {
                             width: parent.width
                             height: 24
 
-                            Text {
+                            IconText {
                                 anchors.left: parent.left
                                 anchors.verticalCenter: parent.verticalCenter
                                 text: "‹"
-                                color: Color.text
-                                font.family: Style.font.family
-                                font.pixelSize: Style.font.iconLarge
+                                size: Style.font.iconLarge
 
                                 MouseArea {
                                     anchors.fill: parent
@@ -160,22 +90,18 @@ Item {
                                 }
                             }
 
-                            Text {
+                            IconText {
                                 anchors.centerIn: parent
                                 text: new Date(root.viewYear, root.viewMonth, 1).toLocaleString(Qt.locale(), "MMMM yyyy")
-                                color: Color.text
-                                font.family: Style.font.family
-                                font.pixelSize: Style.font.heading
+                                size: Style.font.heading
                                 font.bold: true
                             }
 
-                            Text {
+                            IconText {
                                 anchors.right: parent.right
                                 anchors.verticalCenter: parent.verticalCenter
                                 text: "›"
-                                color: Color.text
-                                font.family: Style.font.family
-                                font.pixelSize: Style.font.iconLarge
+                                size: Style.font.iconLarge
 
                                 MouseArea {
                                     anchors.fill: parent
@@ -192,14 +118,13 @@ Item {
                             Repeater {
                                 model: root.weekdayLabels
 
-                                delegate: Text {
+                                delegate: IconText {
                                     required property string modelData
                                     width: 36
                                     height: 18
                                     text: modelData
                                     color: Color.muted
-                                    font.family: Style.font.family
-                                    font.pixelSize: Style.font.caption
+                                    size: Style.font.caption
                                     font.bold: true
                                     horizontalAlignment: Text.AlignHCenter
                                 }
@@ -220,48 +145,16 @@ Item {
                                     height: 28
                                     color: modelData > 0 && root.isToday(modelData) ? Color.text : "transparent"
 
-                                    Text {
+                                    IconText {
                                         anchors.centerIn: parent
                                         visible: modelData > 0
                                         text: modelData
                                         color: root.isToday(modelData) ? Color.background : Color.text
-                                        font.family: Style.font.family
-                                        font.pixelSize: Style.font.body
+                                        size: Style.font.body
                                     }
                                 }
                             }
                         }
-                    }
-                }
-            }
-
-            Variants {
-                model: Quickshell.screens
-
-                delegate: PanelWindow {
-                    required property var modelData
-
-                    screen: modelData
-                    visible: overlay.screen && modelData.name !== overlay.screen.name
-                    color: "transparent"
-                    exclusionMode: ExclusionMode.Ignore
-                    WlrLayershell.namespace: "clock-panel-dismiss"
-                    WlrLayershell.layer: WlrLayer.Overlay
-                    WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
-
-                    anchors {
-                        top: true
-                        bottom: true
-                        left: true
-                        right: true
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: root.opened = false
-                    }
-                }
-            }
         }
     }
 }

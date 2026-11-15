@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import "../../../Commons"
+import "../../../Ui"
 
 Item {
     id: root
@@ -8,21 +9,9 @@ Item {
     implicitWidth: icon.width
     implicitHeight: Style.bar.height
 
-    Text {
+    BarButton {
         id: icon
-        anchors.verticalCenter: parent.verticalCenter
-        width: Math.max(implicitWidth, 18)
-        height: 32
-        text: "󰅇"
-        color: Color.text
-        font.family: Style.font.family
-        font.pixelSize: Style.font.heading
-        verticalAlignment: Text.AlignVCenter
-        horizontalAlignment: Text.AlignHCenter
-    }
-
-    MouseArea {
-        anchors.fill: parent
+        icon: "󰅇"
         onClicked: Quickshell.execDetached(["qs", "ipc", "call", "clipboard", "toggle"])
     }
 }

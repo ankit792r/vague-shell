@@ -2,6 +2,7 @@
 import QtQuick
 import Quickshell.Services.UPower
 import "../../../Commons"
+import "../../../Ui"
 
 Item {
     id: root
@@ -17,7 +18,7 @@ Item {
     implicitWidth: label.implicitWidth
     implicitHeight: Style.bar.height
 
-    Text {
+    IconText {
         id: label
         anchors.centerIn: parent
 
@@ -40,8 +41,6 @@ Item {
             return icon + " " + root.percent + "%"
         }
 
-        color: Color.text
-        font.family: Style.font.family
-        font.pixelSize: Style.font.heading
+        size: Style.font.heading
     }
 }

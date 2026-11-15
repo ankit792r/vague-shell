@@ -3,6 +3,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
 import "../../Commons"
+import "../../Ui"
 
 Item {
     id: root
@@ -185,41 +186,13 @@ Item {
         function hide(): string { root.opened = false; return "closed" }
     }
 
-    PanelWindow {
-        id: overlay
+    CenterOverlay {
+        shown: root.opened
+        panelNamespace: "clipboard"
+        cardWidth: 560
+        cardHeight: 480
+        onDismissed: root.opened = false
 
-        visible: root.opened
-        color: "transparent"
-        exclusionMode: ExclusionMode.Ignore
-        aboveWindows: true
-        focusable: true
-        WlrLayershell.namespace: "clipboard"
-        WlrLayershell.layer: WlrLayer.Overlay
-        WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
-
-        anchors { top: true; bottom: true; left: true; right: true }
-
-        MouseArea {
-            anchors.fill: parent
-            acceptedButtons: Qt.AllButtons
-            onClicked: root.opened = false
-        }
-
-        Rectangle {
-            id: card
-            anchors.centerIn: parent
-            width: Math.min(560, overlay.width - 48)
-            height: Math.min(480, overlay.height - 48)
-            color: Color.background
-            border.color: Color.border
-            border.width: 2
-
-            MouseArea { anchors.fill: parent; acceptedButtons: Qt.AllButtons }
-
-            Column {
-                anchors.fill: parent
-                anchors.margins: 14
-                spacing: 10
 
                 Row {
                     width: parent.width
@@ -252,14 +225,13 @@ Item {
                             Keys.onDeletePressed: if (root.shown.length > 0) root.removeRow(root.shown[root.selected])
                         }
 
-                        Text {
+                        IconText {
                             anchors.left: parent.left
                             anchors.leftMargin: 10
                             anchors.verticalCenter: parent.verticalCenter
                             text: "Search clipboard"
                             color: Color.muted
-                            font.family: Style.font.family
-                            font.pixelSize: Style.font.subtitle
+                            size: Style.font.subtitle
                             visible: filter.text === "" && !filter.activeFocus
                         }
                     }
@@ -272,12 +244,11 @@ Item {
                         border.color: Color.border
                         border.width: 1
 
-                        Text {
+                        IconText {
                             anchors.centerIn: parent
                             text: "Clear"
                             color: Color.urgent
-                            font.family: Style.font.family
-                            font.pixelSize: Style.font.body
+                            size: Style.font.body
                         }
 
                         MouseArea {
@@ -324,13 +295,11 @@ Item {
                                 source: modelData.path ? ("file://" + modelData.path) : ""
                             }
 
-                            Text {
+                            IconText {
                                 anchors.verticalCenter: parent.verticalCenter
                                 width: parent.width - (modelData.type === "image" ? 52 : 0)
                                 text: modelData.label
-                                color: Color.text
-                                font.family: Style.font.family
-                                font.pixelSize: Style.font.body
+                                size: Style.font.body
                                 elide: Text.ElideRight
                                 maximumLineCount: 1
                             }
@@ -345,7 +314,5 @@ Item {
                         }
                     }
                 }
-            }
-        }
     }
 }

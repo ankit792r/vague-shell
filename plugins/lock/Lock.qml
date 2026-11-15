@@ -4,6 +4,7 @@ import Quickshell.Io
 import Quickshell.Services.Pam
 import Quickshell.Wayland
 import "../../Commons"
+import "../../Ui"
 
 Item {
     id: root
@@ -119,29 +120,25 @@ Item {
                 spacing: 18
                 width: 360
 
-                Text {
+                IconText {
                     anchors.horizontalCenter: parent.horizontalCenter
                     text: Qt.formatDateTime(clock.date, "HH:mm")
-                    color: Color.text
-                    font.family: Style.font.family
-                    font.pixelSize: Style.font.clock
+                    size: Style.font.clock
                     font.bold: true
                 }
 
-                Text {
+                IconText {
                     anchors.horizontalCenter: parent.horizontalCenter
                     text: Qt.formatDateTime(clock.date, "dddd d MMMM")
                     color: Color.subtext
-                    font.family: Style.font.family
-                    font.pixelSize: Style.font.heading
+                    size: Style.font.heading
                 }
 
-                Text {
+                IconText {
                     anchors.horizontalCenter: parent.horizontalCenter
                     text: root.userName
                     color: Color.muted
-                    font.family: Style.font.family
-                    font.pixelSize: Style.font.subtitle
+                    size: Style.font.subtitle
                 }
 
                 Rectangle {
@@ -176,24 +173,22 @@ Item {
                         }
                     }
 
-                    Text {
+                    IconText {
                         anchors.left: parent.left
                         anchors.leftMargin: 14
                         anchors.verticalCenter: parent.verticalCenter
                         text: root.authenticating ? "Checking" : "Password"
                         color: Color.muted
-                        font.family: Style.font.family
-                        font.pixelSize: Style.font.heading
+                        size: Style.font.heading
                         visible: passwordInput.text.length === 0
                     }
                 }
 
-                Text {
+                IconText {
                     anchors.horizontalCenter: parent.horizontalCenter
                     text: root.failureMessage
                     color: Color.urgent
-                    font.family: Style.font.family
-                    font.pixelSize: Style.font.body
+                    size: Style.font.body
                     visible: text !== ""
                 }
             }

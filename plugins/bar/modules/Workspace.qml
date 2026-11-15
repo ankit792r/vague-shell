@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import "../../../Commons"
+import "../../../Ui"
 
 Item {
     id: root
@@ -140,12 +141,11 @@ Item {
                     border.color: modelData.is_active ? Color.text : Color.border
                     border.width: 1
 
-                    Text {
+                    IconText {
                         anchors.centerIn: parent
                         text: modelData.name || modelData.idx
                         color: modelData.is_urgent ? Color.urgent : (modelData.is_active ? Color.background : Color.text)
-                        font.family: Style.font.family
-                        font.pixelSize: Style.font.heading
+                        size: Style.font.heading
                     }
 
                     MouseArea {
@@ -156,13 +156,12 @@ Item {
             }
         }
 
-        Text {
+        IconText {
             anchors.verticalCenter: parent.verticalCenter
             width: Math.min(implicitWidth, 280)
             text: root.windowTitle
             color: Color.subtext
-            font.family: Style.font.family
-            font.pixelSize: Style.font.subtitle
+            size: Style.font.subtitle
             elide: Text.ElideRight
             visible: text !== ""
         }

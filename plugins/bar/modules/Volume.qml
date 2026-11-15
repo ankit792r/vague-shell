@@ -1,8 +1,8 @@
 import QtQuick
 import Quickshell
 import Quickshell.Services.Pipewire
-import Quickshell.Wayland
 import "../../../Commons"
+import "../../../Ui"
 
 Item {
     id: root
@@ -72,236 +72,50 @@ Item {
 
     onOpenedChanged: if (opened) refreshOutputs()
 
-    Row {
+    BarButton {
         id: row
-        anchors.verticalCenter: parent.verticalCenter
-        spacing: 6
-
-        Text {
-            anchors.verticalCenter: parent.verticalCenter
-            text: "󰓃"
-            color: Color.text
-            font.family: Style.font.family
-            font.pixelSize: Style.font.heading
-            opacity: root.muted ? 0.5 : 1
-        }
-
-        Text {
-            anchors.verticalCenter: parent.verticalCenter
-            text: root.percent + "%"
-            color: Color.text
-            font.family: Style.font.family
-            font.pixelSize: Style.font.heading
-            opacity: root.muted ? 0.5 : 1
-        }
-    }
-
-    MouseArea {
-        anchors.fill: parent
-        acceptedButtons: Qt.LeftButton | Qt.RightButton
-        onClicked: function (mouse) {
-            if (mouse.button === Qt.RightButton) {
-                if (root.audio) root.audio.muted = !root.audio.muted
-            } else {
-                root.opened = !root.opened
-            }
-        }
-        onWheel: function (wheel) {
-            root.setVolume(root.level + (wheel.angleDelta.y > 0 ? 0.05 : -0.05))
-        }
+        icon: "󰓃"
+        label: root.percent + "%"
+        dimmed: root.muted
+        onClicked: root.opened = !root.opened
+        onRightClicked: if (root.audio) root.audio.muted = !root.audio.muted
+        onWheeled: function (delta) { root.setVolume(root.level + (delta > 0 ? 0.05 : -0.05)) }
     }
 
     Loader {
         active: root.opened
-        sourceComponent: panelComponent
-    }
+        sourceComponent: PanelPopup {
+            anchorItem: row
+            panelNamespace: "volume-panel"
+            cardWidth: 380
+            cardSpacing: 14
+            onDismissed: root.opened = false
 
-    Component {
-        id: panelComponent
+                        PanelHero {
+    icon: root.glyph()
+    title: root.outputName
+    subtitle: root.muted ? "MUTED" : "VOLUME"
+    iconOpacity: root.muted ? 0.5 : 1
+ToggleSwitch {
+    id: muteSwitch
+    checked: !(root.muted)
+    onToggled: if (root.audio) root.audio.muted = !root.audio.muted
+}
+}
 
-        Item {
-            PanelWindow {
-                id: overlay
+                        LabeledValue {
+    label: "VOLUME"
+    value: root.percent + "%"
+}
 
-                screen: row.QsWindow.window ? row.QsWindow.window.screen : null
-                color: "transparent"
-                exclusionMode: ExclusionMode.Ignore
-                aboveWindows: true
-                focusable: true
-                WlrLayershell.namespace: "volume-panel"
-                WlrLayershell.layer: WlrLayer.Overlay
-                WlrLayershell.keyboardFocus: WlrKeyboardFocus.OnDemand
+                        Slider {
+    value: root.level
+    fillOpacity: root.muted ? 0.4 : 1
+    onMoved: function (next) { root.setVolume(next) }
+}
 
-                anchors {
-                    top: true
-                    bottom: true
-                    left: true
-                    right: true
-                }
-
-                MouseArea {
-                    anchors.fill: parent
-                    acceptedButtons: Qt.AllButtons
-                    onClicked: root.opened = false
-                }
-
-                Rectangle {
-                    id: card
-
-                    readonly property real screenW: overlay.screen ? overlay.screen.width : 1920
-                    readonly property point anchor: {
-                        var window = row.QsWindow.window
-                        if (!window) return Qt.point(8, 40)
-                        return row.mapToItem(window.contentItem, 0, 0)
-                    }
-
-                    width: 380
-                    height: column.implicitHeight + 28
-                    color: Color.background
-                    border.color: Color.border
-                    border.width: 2
-                    x: Math.max(8, Math.min(anchor.x + row.width / 2 - width / 2, screenW - width - 8))
-                    y: 40
-
-                    MouseArea {
-                        anchors.fill: parent
-                        acceptedButtons: Qt.AllButtons
-                    }
-
-                    Column {
-                        id: column
-                        z: 1
-                        anchors.left: parent.left
-                        anchors.right: parent.right
-                        anchors.top: parent.top
-                        anchors.margins: 14
-                        spacing: 14
-
-                        Item {
-                            width: parent.width
-                            height: 42
-
-                            Text {
-                                id: heroIcon
-                                anchors.left: parent.left
-                                anchors.verticalCenter: parent.verticalCenter
-                                text: root.glyph()
-                                color: Color.text
-                                font.family: Style.font.family
-                                font.pixelSize: Style.font.displayLarge
-                                opacity: root.muted ? 0.5 : 1
-                            }
-
-                            Column {
-                                anchors.left: heroIcon.right
-                                anchors.leftMargin: 14
-                                anchors.right: muteSwitch.left
-                                anchors.rightMargin: 12
-                                anchors.verticalCenter: parent.verticalCenter
-                                spacing: 2
-
-                                Text {
-                                    width: parent.width
-                                    text: root.outputName
-                                    color: Color.text
-                                    font.family: Style.font.family
-                                    font.pixelSize: Style.font.heading
-                                    font.bold: true
-                                    elide: Text.ElideRight
-                                }
-
-                                Text {
-                                    width: parent.width
-                                    text: root.muted ? "MUTED" : "VOLUME"
-                                    color: Color.muted
-                                    font.family: Style.font.family
-                                    font.pixelSize: Style.font.caption
-                                    font.bold: true
-                                    font.letterSpacing: 1.2
-                                }
-                            }
-
-                            Rectangle {
-                                id: muteSwitch
-                                anchors.right: parent.right
-                                anchors.verticalCenter: parent.verticalCenter
-                                width: 36
-                                height: 20
-                                color: root.muted ? Color.border : Color.success
-
-                                Rectangle {
-                                    width: 16
-                                    height: 16
-                                    color: Color.background
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    x: root.muted ? 2 : parent.width - width - 2
-                                }
-
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onClicked: if (root.audio) root.audio.muted = !root.audio.muted
-                                }
-                            }
-                        }
-
-                        Item {
-                            width: parent.width
-                            height: 18
-
-                            Text {
-                                anchors.left: parent.left
-                                anchors.verticalCenter: parent.verticalCenter
-                                text: "VOLUME"
-                                color: Color.muted
-                                font.family: Style.font.family
-                                font.pixelSize: Style.font.caption
-                                font.bold: true
-                                font.letterSpacing: 1.2
-                            }
-
-                            Text {
-                                anchors.right: parent.right
-                                anchors.verticalCenter: parent.verticalCenter
-                                text: root.percent + "%"
-                                color: Color.text
-                                font.family: Style.font.family
-                                font.pixelSize: Style.font.body
-                            }
-                        }
-
-                        Rectangle {
-                            width: parent.width
-                            height: 18
-                            color: "transparent"
-
-                            Rectangle {
-                                anchors.verticalCenter: parent.verticalCenter
-                                width: parent.width
-                                height: 6
-                                color: Color.surface
-
-                                Rectangle {
-                                    width: parent.width * root.level
-                                    height: parent.height
-                                    color: Color.text
-                                    opacity: root.muted ? 0.4 : 1
-                                }
-                            }
-
-                            MouseArea {
-                                anchors.fill: parent
-                                onPressed: function (mouse) { root.setVolume(mouse.x / width) }
-                                onPositionChanged: function (mouse) { if (pressed) root.setVolume(mouse.x / width) }
-                            }
-                        }
-
-                        Text {
+                        SectionLabel {
                             text: "OUTPUT"
-                            color: Color.muted
-                            font.family: Style.font.family
-                            font.pixelSize: Style.font.caption
-                            font.bold: true
-                            font.letterSpacing: 1.2
                         }
 
                         ListView {
@@ -311,64 +125,13 @@ Item {
                             spacing: 2
                             model: root.outputs
 
-                            delegate: Rectangle {
+                            delegate: ListRow {
                                 required property var modelData
-                                width: ListView.view.width
-                                height: 32
-                                color: modelData.current || outputMouse.containsMouse ? Color.surface : "transparent"
-
-                                Text {
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    anchors.left: parent.left
-                                    anchors.leftMargin: 8
-                                    anchors.right: parent.right
-                                    anchors.rightMargin: 8
-                                    text: modelData.description
-                                    color: Color.text
-                                    font.family: Style.font.family
-                                    font.pixelSize: Style.font.body
-                                    elide: Text.ElideRight
-                                }
-
-                                MouseArea {
-                                    id: outputMouse
-                                    anchors.fill: parent
-                                    hoverEnabled: true
-                                    onClicked: root.selectOutput(modelData.name)
-                                }
+                                active: modelData.current
+                                label: modelData.description
+                                onActivated: root.selectOutput(modelData.name)
                             }
                         }
-                    }
-                }
-            }
-
-            Variants {
-                model: Quickshell.screens
-
-                delegate: PanelWindow {
-                    required property var modelData
-
-                    screen: modelData
-                    visible: overlay.screen && modelData.name !== overlay.screen.name
-                    color: "transparent"
-                    exclusionMode: ExclusionMode.Ignore
-                    WlrLayershell.namespace: "volume-panel-dismiss"
-                    WlrLayershell.layer: WlrLayer.Overlay
-                    WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
-
-                    anchors {
-                        top: true
-                        bottom: true
-                        left: true
-                        right: true
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: root.opened = false
-                    }
-                }
-            }
         }
     }
 }
