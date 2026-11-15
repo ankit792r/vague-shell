@@ -123,7 +123,8 @@ Item {
                     text: Qt.formatDateTime(clock.date, "HH:mm")
                     color: "#cdd6f4"
                     font.family: "Iosevka Nerd Font"
-                    font.pixelSize: 64
+                    font.pixelSize: 72
+                    font.bold: true
                 }
 
                 Text {
@@ -159,6 +160,8 @@ Item {
                         color: "#cdd6f4"
                         font.family: "Iosevka Nerd Font"
                         font.pixelSize: 16
+                        font.bold: true
+                        focus: true
                         echoMode: TextInput.Password
                         passwordCharacter: "•"
                         enabled: !root.authenticating
