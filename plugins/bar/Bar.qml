@@ -9,7 +9,6 @@ Item {
 
     property var layout: ({
         left: [
-            { id: "launcher" },
             { id: "workspace" },
         ],
         center: [
@@ -31,7 +30,6 @@ Item {
 
     // Stand-in for BarWidgetRegistry.widgets[id].component.
     function moduleFor(id) {
-        if (id === "launcher") return launcherComponent
         if (id === "workspace") return workspaceComponent
         if (id === "clock") return clockComponent
         if (id === "media") return mediaComponent
@@ -47,7 +45,6 @@ Item {
         return null
     }
 
-    Component { id: launcherComponent; Launcher {} }
     Component { id: workspaceComponent; Workspace {} }
     Component { id: clockComponent; Clock {} }
 
