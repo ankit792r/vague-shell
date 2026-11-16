@@ -1,0 +1,20 @@
+input {
+    keyboard {
+        xkb {
+            layout "us"
+        }
+    }
+}
+
+layout {
+    background-color "#1e1e2e"
+}
+
+// Launch Quickshell with your greeter config
+spawn-at-startup "quickshell" "-p" "/etc/greetd/shell.qml"
+
+// Disable hotkeys you do not want available on the login screen
+binds {
+    Mod+Shift+E { quit; }
+}
+
