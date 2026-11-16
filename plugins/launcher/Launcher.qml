@@ -158,16 +158,16 @@ Item {
                     anchors.fill: parent
                     anchors.leftMargin: 8
                     anchors.rightMargin: 8
-                    spacing: 8
+                    spacing: 12
 
                     Image {
                         anchors.verticalCenter: parent.verticalCenter
-                        width: 18
-                        height: 18
+                        width: Style.font.launcherIcon
+                        height: Style.font.launcherIcon
                         source: Quickshell.iconPath(modelData.icon, "application-x-executable")
                         fillMode: Image.PreserveAspectFit
                         asynchronous: true
-                        sourceSize: Qt.size(36, 36)
+                        sourceSize: Qt.size(Style.font.launcherIcon, Style.font.launcherIcon)
                     }
 
                     IconText {
@@ -175,7 +175,7 @@ Item {
                         anchors.verticalCenter: parent.verticalCenter
                         width: genericLabel.visible ? Math.round((parent.width - 26) * 0.62) : parent.width - 26
                         text: modelData.name
-                        size: Style.font.body
+                        size: Style.font.launcherText
                         elide: Text.ElideRight
                     }
 
@@ -186,7 +186,7 @@ Item {
                         visible: modelData.genericName !== "" && modelData.genericName !== modelData.name
                         text: modelData.genericName
                         color: Commons.Color.muted
-                        size: Style.font.bodySmall
+                        size: Style.font.launcherTextSmall
                         elide: Text.ElideRight
                     }
                 }

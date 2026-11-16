@@ -27,6 +27,11 @@ QtObject {
         readonly property int display: root.fontPx(1.5)          // 24
         readonly property int displayLarge: root.fontPx(1.75)    // 28
         readonly property int clock: root.fontPx(4.5)            // 72
+
+        // Launcher
+        readonly property int launcherIcon: root.fontPx(2)       // 32
+        readonly property int launcherText: root.fontPx(1.25)    // 20
+        readonly property int launcherTextSmall: root.fontPx(1)   // 16
     }
 
     readonly property QtObject bar: QtObject {
