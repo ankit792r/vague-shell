@@ -9,13 +9,12 @@ Item {
 
     property var layout: ({
         left: [
+            { id: "clock" },
             { id: "workspace" },
         ],
-        center: [
-            { id: "clock" },
-            { id: "media" },
-        ],
+        center: [],
         right: [
+             { id: "media" },
             { id: "volume" },
             { id: "brightness" },
             { id: "network" },
