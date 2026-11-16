@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import "../../../Commons"
+import "../../../Commons" as Commons
 import "../../../Ui"
 
 Item {
@@ -123,7 +124,7 @@ Item {
                                     width: 36
                                     height: 18
                                     text: modelData
-                                    color: Color.muted
+                                    color: Commons.Color.muted
                                     size: Style.font.caption
                                     font.bold: true
                                     horizontalAlignment: Text.AlignHCenter
@@ -143,13 +144,13 @@ Item {
                                     required property int modelData
                                     width: 36
                                     height: 28
-                                    color: modelData > 0 && root.isToday(modelData) ? Color.text : "transparent"
+                                    color: modelData > 0 && root.isToday(modelData) ? Commons.Color.text : "transparent"
 
                                     IconText {
                                         anchors.centerIn: parent
                                         visible: modelData > 0
                                         text: modelData
-                                        color: root.isToday(modelData) ? Color.background : Color.text
+                                        color: root.isToday(modelData) ? Commons.Color.background : Commons.Color.text
                                         size: Style.font.body
                                     }
                                 }

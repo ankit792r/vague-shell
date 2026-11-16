@@ -2,12 +2,14 @@ import QtQuick
 import Quickshell
 import "modules"
 import "../../Commons"
+import "../../Commons" as Commons
 
 Item {
     id: root
 
     property var layout: ({
         left: [
+            { id: "launcher" },
             { id: "workspace" },
         ],
         center: [
@@ -29,6 +31,7 @@ Item {
 
     // Stand-in for BarWidgetRegistry.widgets[id].component.
     function moduleFor(id) {
+        if (id === "launcher") return launcherComponent
         if (id === "workspace") return workspaceComponent
         if (id === "clock") return clockComponent
         if (id === "media") return mediaComponent
@@ -44,6 +47,7 @@ Item {
         return null
     }
 
+    Component { id: launcherComponent; Launcher {} }
     Component { id: workspaceComponent; Workspace {} }
     Component { id: clockComponent; Clock {} }
 
@@ -73,7 +77,7 @@ Item {
             }
 
             implicitHeight: Style.bar.height
-            color: Color.background
+            color: Commons.Color.background
 
             Item {
                 anchors.fill: parent

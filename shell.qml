@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import "plugins/bar"
 import "plugins/clipboard"
+import "plugins/launcher"
 import "plugins/lock"
 
 ShellRoot {
@@ -21,5 +22,6 @@ ShellRoot {
     }
 
     Clipboard {}
+    Launcher {}
     Lock {}
 }

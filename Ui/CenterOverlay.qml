@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Wayland
 import "../Commons"
+import "../Commons" as Commons
 
 // Centered card on a fullscreen layer. Used by overlays that are not
 // attached to a bar icon, such as the clipboard.
@@ -44,8 +45,8 @@ Item {
                 anchors.centerIn: parent
                 width: Math.min(root.cardWidth, overlay.width - 48)
                 height: Math.min(root.cardHeight, overlay.height - 48)
-                color: Color.background
-                border.color: Color.border
+                color: Commons.Color.background
+                border.color: Commons.Color.border
                 border.width: 2
 
                 MouseArea { anchors.fill: parent; acceptedButtons: Qt.AllButtons }

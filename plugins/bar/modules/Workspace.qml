@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import "../../../Commons"
+import "../../../Commons" as Commons
 import "../../../Ui"
 
 Item {
@@ -137,14 +138,14 @@ Item {
                     required property var modelData
                     width: 22
                     height: 22
-                    color: modelData.is_active ? Color.text : "transparent"
-                    border.color: modelData.is_active ? Color.text : Color.border
+                    color: modelData.is_active ? Commons.Color.text : "transparent"
+                    border.color: modelData.is_active ? Commons.Color.text : Commons.Color.border
                     border.width: 1
 
                     IconText {
                         anchors.centerIn: parent
                         text: modelData.name || modelData.idx
-                        color: modelData.is_urgent ? Color.urgent : (modelData.is_active ? Color.background : Color.text)
+                        color: modelData.is_urgent ? Commons.Color.urgent : (modelData.is_active ? Commons.Color.background : Commons.Color.text)
                         size: Style.font.heading
                     }
 
@@ -160,7 +161,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             width: Math.min(implicitWidth, 280)
             text: root.windowTitle
-            color: Color.subtext
+            color: Commons.Color.subtext
             size: Style.font.subtitle
             elide: Text.ElideRight
             visible: text !== ""

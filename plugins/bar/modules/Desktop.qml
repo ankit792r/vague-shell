@@ -1,6 +1,7 @@
 import QtQuick
 import Quickshell
 import "../../../Commons"
+import "../../../Commons" as Commons
 import "../../../Ui"
 
 Item {
@@ -56,8 +57,8 @@ Item {
                                     required property var modelData
                                     width: (parent.width - 32) / 5
                                     height: 64
-                                    color: actionMouse.containsMouse ? Color.surface : "transparent"
-                                    border.color: modelData.label === "Power off" ? Color.urgent : Color.border
+                                    color: actionMouse.containsMouse ? Commons.Color.surface : "transparent"
+                                    border.color: modelData.label === "Power off" ? Commons.Color.urgent : Commons.Color.border
                                     border.width: 1
 
                                     Column {
@@ -67,14 +68,14 @@ Item {
                                         IconText {
                                             anchors.horizontalCenter: parent.horizontalCenter
                                             text: modelData.icon
-                                            color: modelData.label === "Power off" ? Color.urgent : Color.text
+                                            color: modelData.label === "Power off" ? Commons.Color.urgent : Commons.Color.text
                                             size: Style.font.iconLarge
                                         }
 
                                         IconText {
                                             anchors.horizontalCenter: parent.horizontalCenter
                                             text: modelData.label
-                                            color: modelData.label === "Power off" ? Color.urgent : Color.text
+                                            color: modelData.label === "Power off" ? Commons.Color.urgent : Commons.Color.text
                                             size: Style.font.caption
                                         }
                                     }
@@ -96,8 +97,8 @@ Item {
                             Rectangle {
                                 width: (parent.width - 8) / 2
                                 height: 40
-                                color: root.dnd ? Color.surface : "transparent"
-                                border.color: root.dnd ? Color.text : Color.border
+                                color: root.dnd ? Commons.Color.surface : "transparent"
+                                border.color: root.dnd ? Commons.Color.text : Commons.Color.border
                                 border.width: 1
 
                                 Row {
@@ -126,8 +127,8 @@ Item {
                             Rectangle {
                                 width: (parent.width - 8) / 2
                                 height: 40
-                                color: root.nightLight ? Color.surface : "transparent"
-                                border.color: root.nightLight ? Color.warning : Color.border
+                                color: root.nightLight ? Commons.Color.surface : "transparent"
+                                border.color: root.nightLight ? Commons.Color.warning : Commons.Color.border
                                 border.width: 1
 
                                 Row {
@@ -137,14 +138,14 @@ Item {
                                     IconText {
                                         anchors.verticalCenter: parent.verticalCenter
                                         text: "󰖔"
-                                        color: root.nightLight ? Color.warning : Color.text
+                                        color: root.nightLight ? Commons.Color.warning : Commons.Color.text
                                         size: Style.font.heading
                                     }
 
                                     IconText {
                                         anchors.verticalCenter: parent.verticalCenter
                                         text: "Night light"
-                                        color: root.nightLight ? Color.warning : Color.text
+                                        color: root.nightLight ? Commons.Color.warning : Commons.Color.text
                                         size: Style.font.body
                                     }
                                 }

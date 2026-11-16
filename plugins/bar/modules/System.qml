@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 import "../../../Commons"
+import "../../../Commons" as Commons
 import "../../../Ui"
 
 Item {
@@ -232,7 +233,7 @@ Item {
 
                                 IconText {
                                     text: "CPU"
-                                    color: Color.muted
+                                    color: Commons.Color.muted
                                     size: Style.font.subtitle
                                     font.bold: true
                                     font.letterSpacing: 1.2
@@ -248,11 +249,11 @@ Item {
                             Rectangle {
                                 width: parent.width
                                 height: 8
-                                color: Color.surface
+                                color: Commons.Color.surface
                                 Rectangle {
                                     width: parent.width * root.cpu / 100
                                     height: parent.height
-                                    color: Color.text
+                                    color: Commons.Color.text
                                 }
                             }
                         }
@@ -267,7 +268,7 @@ Item {
 
                                 IconText {
                                     text: "MEM"
-                                    color: Color.muted
+                                    color: Commons.Color.muted
                                     size: Style.font.subtitle
                                     font.bold: true
                                     font.letterSpacing: 1.2
@@ -283,11 +284,11 @@ Item {
                             Rectangle {
                                 width: parent.width
                                 height: 8
-                                color: Color.surface
+                                color: Commons.Color.surface
                                 Rectangle {
                                     width: parent.width * root.memPercent / 100
                                     height: parent.height
-                                    color: Color.success
+                                    color: Commons.Color.success
                                 }
                             }
 
@@ -297,7 +298,7 @@ Item {
 
                                 IconText {
                                     text: "SWAP"
-                                    color: Color.muted
+                                    color: Commons.Color.muted
                                     size: Style.font.subtitle
                                     font.bold: true
                                     font.letterSpacing: 1.2
@@ -315,11 +316,11 @@ Item {
                             Rectangle {
                                 width: parent.width
                                 height: 8
-                                color: Color.surface
+                                color: Commons.Color.surface
                                 Rectangle {
                                     width: parent.width * root.swapPercent / 100
                                     height: parent.height
-                                    color: Color.warning
+                                    color: Commons.Color.warning
                                 }
                             }
                         }
@@ -330,13 +331,13 @@ Item {
                             columnSpacing: 16
                             rowSpacing: 6
 
-                            IconText { text: "TASKS"; color: Color.muted; size: Style.font.subtitle; font.bold: true; font.letterSpacing: 1.2 }
+                            IconText { text: "TASKS"; color: Commons.Color.muted; size: Style.font.subtitle; font.bold: true; font.letterSpacing: 1.2 }
                             IconText { text: root.taskCount; size: Style.font.subtitle; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
-                            IconText { text: "THREADS"; color: Color.muted; size: Style.font.subtitle; font.bold: true; font.letterSpacing: 1.2 }
+                            IconText { text: "THREADS"; color: Commons.Color.muted; size: Style.font.subtitle; font.bold: true; font.letterSpacing: 1.2 }
                             IconText { text: root.threadCount; size: Style.font.subtitle; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
-                            IconText { text: "LOAD"; color: Color.muted; size: Style.font.subtitle; font.bold: true; font.letterSpacing: 1.2 }
+                            IconText { text: "LOAD"; color: Commons.Color.muted; size: Style.font.subtitle; font.bold: true; font.letterSpacing: 1.2 }
                             IconText { text: root.load; size: Style.font.subtitle; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
-                            IconText { text: "UPTIME"; color: Color.muted; size: Style.font.subtitle; font.bold: true; font.letterSpacing: 1.2 }
+                            IconText { text: "UPTIME"; color: Commons.Color.muted; size: Style.font.subtitle; font.bold: true; font.letterSpacing: 1.2 }
                             IconText { text: root.uptime; size: Style.font.subtitle; Layout.fillWidth: true; horizontalAlignment: Text.AlignRight }
                         }
         }

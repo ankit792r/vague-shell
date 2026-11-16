@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Bluetooth
 import "../../../Commons"
+import "../../../Commons" as Commons
 import "../../../Ui"
 
 Item {
@@ -137,7 +138,7 @@ ToggleSwitch {
                             width: parent.width
                             wrapMode: Text.WordWrap
                             text: !root.adapter ? "No Bluetooth adapter" : (!root.radioOn ? "Turn Bluetooth on to scan" : "Scanning")
-                            color: Color.muted
+                            color: Commons.Color.muted
                             size: Style.font.body
                         }
 
@@ -170,7 +171,7 @@ ToggleSwitch {
                                     anchors.bottom: parent.bottom
                                     height: modelData.connected ? 44 : 36
                                     radius: 8
-                                    color: rowMouse.containsMouse ? Color.surface : "transparent"
+                                    color: rowMouse.containsMouse ? Commons.Color.surface : "transparent"
 
                                     Row {
                                         anchors.fill: parent
@@ -182,7 +183,7 @@ ToggleSwitch {
                                             anchors.verticalCenter: parent.verticalCenter
                                             width: 22
                                             text: "󰂯"
-                                            color: modelData.connected ? Color.text : Color.muted
+                                            color: modelData.connected ? Commons.Color.text : Commons.Color.muted
                                             size: Style.font.heading
                                             horizontalAlignment: Text.AlignHCenter
                                         }
@@ -203,7 +204,7 @@ ToggleSwitch {
                                                 visible: modelData.connected
                                                 width: parent.width
                                                 text: modelData.battery >= 0 ? ("Connected · " + modelData.battery + "%") : "Connected"
-                                                color: Color.subtext
+                                                color: Commons.Color.subtext
                                                 size: Style.font.caption
                                                 elide: Text.ElideRight
                                             }

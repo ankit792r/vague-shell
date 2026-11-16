@@ -1,5 +1,6 @@
 import QtQuick
 import "../Commons"
+import "../Commons" as Commons
 
 Rectangle {
     id: root
@@ -10,12 +11,12 @@ Rectangle {
 
     width: 36
     height: 20
-    color: checked ? Color.success : Color.border
+    color: checked ? Commons.Color.success : Commons.Color.border
 
     Rectangle {
         width: 16
         height: 16
-        color: Color.background
+        color: Commons.Color.background
         anchors.verticalCenter: parent.verticalCenter
         x: root.checked ? parent.width - width - 2 : 2
     }

@@ -1,12 +1,13 @@
 import QtQuick
 import "../Commons"
+import "../Commons" as Commons
 
 // Value is 0 to 1. moved() reports the position under the pointer.
 Item {
     id: root
 
     property real value: 0
-    property color fill: Color.text
+    property color fill: Commons.Color.text
     property real fillOpacity: 1
 
     signal moved(real value)
@@ -18,7 +19,7 @@ Item {
         anchors.verticalCenter: parent.verticalCenter
         width: parent.width
         height: 6
-        color: Color.surface
+        color: Commons.Color.surface
 
         Rectangle {
             width: parent.width * Math.max(0, Math.min(1, root.value))

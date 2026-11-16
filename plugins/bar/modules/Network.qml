@@ -4,6 +4,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Networking
 import "../../../Commons"
+import "../../../Commons" as Commons
 import "../../../Ui"
 
 Item {
@@ -205,7 +206,7 @@ ToggleSwitch {
                             placeholderText: "Password for " + root.passwordFor
                             echoMode: TextInput.Password
                             text: root.passwordText
-                            color: Color.text
+                            color: Commons.Color.text
                             font.family: Style.font.family
                             onTextChanged: root.passwordText = text
                             onAccepted: if (root.passwordText !== "") connectWithPassword.running = true
@@ -228,7 +229,7 @@ ToggleSwitch {
                                 width: ListView.view.width
                                 height: modelData.connected ? 44 : 36
                                 radius: 8
-                                color: rowMouse.containsMouse ? Color.surface : "transparent"
+                                color: rowMouse.containsMouse ? Commons.Color.surface : "transparent"
 
                                 Row {
                                     anchors.fill: parent
@@ -240,7 +241,7 @@ ToggleSwitch {
                                         anchors.verticalCenter: parent.verticalCenter
                                         width: 22
                                         text: root.bars(modelData.signal)
-                                        color: modelData.connected ? Color.text : Color.muted
+                                        color: modelData.connected ? Commons.Color.text : Commons.Color.muted
                                         size: Style.font.heading
                                         horizontalAlignment: Text.AlignHCenter
                                     }
@@ -261,7 +262,7 @@ ToggleSwitch {
                                             visible: modelData.connected
                                             width: parent.width
                                             text: "Connected"
-                                            color: Color.subtext
+                                            color: Commons.Color.subtext
                                             size: Style.font.caption
                                             elide: Text.ElideRight
                                         }
@@ -271,7 +272,7 @@ ToggleSwitch {
                                         id: lockGlyph
                                         anchors.verticalCenter: parent.verticalCenter
                                         text: modelData.secure ? "󰌾" : ""
-                                        color: Color.muted
+                                        color: Commons.Color.muted
                                         size: Style.font.subtitle
                                     }
                                 }

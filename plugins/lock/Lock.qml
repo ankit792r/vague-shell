@@ -4,6 +4,7 @@ import Quickshell.Io
 import Quickshell.Services.Pam
 import Quickshell.Wayland
 import "../../Commons"
+import "../../Commons" as Commons
 import "../../Ui"
 
 Item {
@@ -108,7 +109,7 @@ Item {
 
         WlSessionLockSurface {
             id: lockSurface
-            color: Color.scrim
+            color: Commons.Color.scrim
 
             SystemClock {
                 id: clock
@@ -130,14 +131,14 @@ Item {
                 IconText {
                     anchors.horizontalCenter: parent.horizontalCenter
                     text: Qt.formatDateTime(clock.date, "dddd d MMMM")
-                    color: Color.subtext
+                    color: Commons.Color.subtext
                     size: Style.font.heading
                 }
 
                 IconText {
                     anchors.horizontalCenter: parent.horizontalCenter
                     text: root.userName
-                    color: Color.muted
+                    color: Commons.Color.muted
                     size: Style.font.subtitle
                 }
 
@@ -145,8 +146,8 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                     width: 320
                     height: 44
-                    color: Color.background
-                    border.color: root.failureMessage ? Color.urgent : Color.border
+                    color: Commons.Color.background
+                    border.color: root.failureMessage ? Commons.Color.urgent : Commons.Color.border
                     border.width: 2
 
                     TextInput {
@@ -155,7 +156,7 @@ Item {
                         anchors.leftMargin: 14
                         anchors.rightMargin: 14
                         verticalAlignment: TextInput.AlignVCenter
-                        color: Color.text
+                        color: Commons.Color.text
                         font.family: Style.font.family
                         font.pixelSize: Style.font.heading
                         font.bold: true
@@ -178,7 +179,7 @@ Item {
                         anchors.leftMargin: 14
                         anchors.verticalCenter: parent.verticalCenter
                         text: root.authenticating ? "Checking" : "Password"
-                        color: Color.muted
+                        color: Commons.Color.muted
                         size: Style.font.heading
                         visible: passwordInput.text.length === 0
                     }
@@ -187,7 +188,7 @@ Item {
                 IconText {
                     anchors.horizontalCenter: parent.horizontalCenter
                     text: root.failureMessage
-                    color: Color.urgent
+                    color: Commons.Color.urgent
                     size: Style.font.body
                     visible: text !== ""
                 }

@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import "../../../Commons"
+import "../../../Commons" as Commons
 import "../../../Ui"
 
 Item {
@@ -81,7 +82,7 @@ Item {
 
                         Slider {
     value: root.percent / 100
-    fill: Color.warning
+    fill: Commons.Color.warning
     onMoved: function (next) { root.setBrightness(next * 100) }
 }
 

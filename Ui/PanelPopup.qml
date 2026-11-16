@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Wayland
 import "../Commons"
+import "../Commons" as Commons
 
 // Fullscreen layer above the bar widget. Clicking outside dismisses it.
 // Children are placed in the card.
@@ -53,8 +54,8 @@ Item {
 
                 width: root.cardWidth
                 height: column.implicitHeight + 28
-                color: Color.background
-                border.color: Color.border
+                color: Commons.Color.background
+                border.color: Commons.Color.border
                 border.width: 2
                 x: Math.max(8, Math.min(anchor.x + (root.anchorItem ? root.anchorItem.width : 0) / 2 - width / 2, screenW - width - 8))
                 y: 40

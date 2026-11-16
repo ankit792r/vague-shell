@@ -3,6 +3,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
 import "../../Commons"
+import "../../Commons" as Commons
 import "../../Ui"
 
 Item {
@@ -201,7 +202,7 @@ Item {
                     Rectangle {
                         width: parent.width - clearButton.width - 8
                         height: 32
-                        color: Color.surface
+                        color: Commons.Color.surface
 
                         TextInput {
                             id: filter
@@ -209,7 +210,7 @@ Item {
                             anchors.leftMargin: 10
                             anchors.rightMargin: 10
                             verticalAlignment: TextInput.AlignVCenter
-                            color: Color.text
+                            color: Commons.Color.text
                             font.family: Style.font.family
                             font.pixelSize: Style.font.subtitle
                             clip: true
@@ -230,7 +231,7 @@ Item {
                             anchors.leftMargin: 10
                             anchors.verticalCenter: parent.verticalCenter
                             text: "Search clipboard"
-                            color: Color.muted
+                            color: Commons.Color.muted
                             size: Style.font.subtitle
                             visible: filter.text === "" && !filter.activeFocus
                         }
@@ -240,14 +241,14 @@ Item {
                         id: clearButton
                         width: 64
                         height: 32
-                        color: clearMouse.containsMouse ? Color.surface : "transparent"
-                        border.color: Color.border
+                        color: clearMouse.containsMouse ? Commons.Color.surface : "transparent"
+                        border.color: Commons.Color.border
                         border.width: 1
 
                         IconText {
                             anchors.centerIn: parent
                             text: "Clear"
-                            color: Color.urgent
+                            color: Commons.Color.urgent
                             size: Style.font.body
                         }
 
@@ -277,7 +278,7 @@ Item {
                         required property int index
                         width: list.width
                         height: modelData.type === "image" ? 56 : 36
-                        color: index === root.selected || rowMouse.containsMouse ? Color.surface : "transparent"
+                        color: index === root.selected || rowMouse.containsMouse ? Commons.Color.surface : "transparent"
 
                         Row {
                             anchors.fill: parent

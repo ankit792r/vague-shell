@@ -1,5 +1,6 @@
 import QtQuick
 import "../Commons"
+import "../Commons" as Commons
 
 Rectangle {
     id: root
@@ -11,7 +12,7 @@ Rectangle {
 
     width: ListView.view ? ListView.view.width : (parent ? parent.width : 0)
     height: 32
-    color: active || mouse.containsMouse ? Color.surface : "transparent"
+    color: active || mouse.containsMouse ? Commons.Color.surface : "transparent"
 
     IconText {
         anchors.verticalCenter: parent.verticalCenter

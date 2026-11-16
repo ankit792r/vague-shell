@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import Quickshell.Services.Mpris
 import "../../../Commons"
+import "../../../Commons" as Commons
 import "../../../Ui"
 
 Item {
@@ -120,7 +121,7 @@ Item {
                             Rectangle {
                                 width: 64
                                 height: 64
-                                color: Color.surface
+                                color: Commons.Color.surface
 
                                 Image {
                                     anchors.fill: parent
@@ -154,7 +155,7 @@ Item {
                                 IconText {
                                     width: parent.width
                                     text: root.artist
-                                    color: Color.subtext
+                                    color: Commons.Color.subtext
                                     size: Style.font.body
                                     elide: Text.ElideRight
                                     visible: text !== ""
@@ -162,7 +163,7 @@ Item {
                                 IconText {
                                     width: parent.width
                                     text: root.active && root.active.trackAlbum ? root.active.trackAlbum : ""
-                                    color: Color.muted
+                                    color: Commons.Color.muted
                                     size: Style.font.bodySmall
                                     elide: Text.ElideRight
                                     visible: text !== ""
@@ -174,12 +175,12 @@ Item {
                             visible: root.active && root.active.lengthSupported && root.active.length > 0
                             width: parent.width
                             height: 6
-                            color: Color.surface
+                            color: Commons.Color.surface
 
                             Rectangle {
                                 width: parent.width * root.progress
                                 height: parent.height
-                                color: Color.text
+                                color: Commons.Color.text
                             }
 
                             MouseArea {
@@ -198,13 +199,13 @@ Item {
 
                             IconText {
                                 text: root.active ? root.clock(root.active.position) : ""
-                                color: Color.muted
+                                color: Commons.Color.muted
                                 size: Style.font.caption
                             }
                             IconText {
                                 anchors.right: parent.right
                                 text: root.active ? root.clock(root.active.length) : ""
-                                color: Color.muted
+                                color: Commons.Color.muted
                                 size: Style.font.caption
                             }
                         }
@@ -215,7 +216,7 @@ Item {
 
                             IconText {
                                 text: "󰒮"
-                                color: root.active && root.active.canGoPrevious ? Color.text : Color.border
+                                color: root.active && root.active.canGoPrevious ? Commons.Color.text : Commons.Color.border
                                 size: Style.font.displaySmall
                                 MouseArea { anchors.fill: parent; onClicked: root.act("previous") }
                             }
@@ -226,7 +227,7 @@ Item {
                             }
                             IconText {
                                 text: "󰒭"
-                                color: root.active && root.active.canGoNext ? Color.text : Color.border
+                                color: root.active && root.active.canGoNext ? Commons.Color.text : Commons.Color.border
                                 size: Style.font.displaySmall
                                 MouseArea { anchors.fill: parent; onClicked: root.act("next") }
                             }
@@ -244,7 +245,7 @@ Item {
                                     required property var modelData
                                     width: parent.width
                                     height: 36
-                                    color: root.active && modelData.key === root.active.dbusName ? Color.surface : "transparent"
+                                    color: root.active && modelData.key === root.active.dbusName ? Commons.Color.surface : "transparent"
 
                                     Column {
                                         anchors.verticalCenter: parent.verticalCenter
@@ -262,7 +263,7 @@ Item {
                                         IconText {
                                             width: parent.width
                                             text: modelData.artist
-                                            color: Color.muted
+                                            color: Commons.Color.muted
                                             size: Style.font.caption
                                             elide: Text.ElideRight
                                             visible: text !== ""
