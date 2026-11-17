@@ -1,8 +1,16 @@
+prefer-no-csd
+
+hotkey-overlay {
+    skip-at-startup
+}
+
 input {
     keyboard {
         xkb {
             layout "us"
         }
+        repeat-delay 200
+        repeat-rate 40
     }
 }
 
@@ -11,10 +19,9 @@ layout {
 }
 
 // Launch Quickshell with your greeter config
-spawn-at-startup "quickshell" "-p" "/etc/greetd/shell.qml"
+spawn-at-startup "quickshell" "-p" "/etc/greetd/quickshell/shell.qml"
 
 // Disable hotkeys you do not want available on the login screen
 binds {
     Mod+Shift+E { quit; }
 }
-
