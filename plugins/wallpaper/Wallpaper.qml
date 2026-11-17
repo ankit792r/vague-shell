@@ -30,13 +30,13 @@ Item {
                 right: true
             }
 
-            Image {
-                anchors.fill: parent
-                source: root.source
-                fillMode: Image.PreserveAspectCrop
-                asynchronous: true
-                cache: true
-            }
+            // Image {
+            //     anchors.fill: parent
+            //     source: root.source
+            //     fillMode: Image.PreserveAspectCrop
+            //     asynchronous: true
+            //     cache: true
+            // }
         }
     }
 }
