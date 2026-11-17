@@ -2,6 +2,7 @@ import QtQuick
 import Quickshell
 import "plugins/bar"
 import "plugins/clipboard"
+import "services/idle"
 import "plugins/launcher"
 import "plugins/lock"
 import "plugins/wallpaper" 
@@ -23,6 +24,7 @@ ShellRoot {
     }
 
     Clipboard {}
+    Idle {}
     Launcher {}
     Lock {}
     Wallpaper {}
