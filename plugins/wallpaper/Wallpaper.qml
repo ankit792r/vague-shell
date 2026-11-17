@@ -6,8 +6,8 @@ import "../../Commons" as Commons
 Item {
     id: root
 
-    readonly property string path: (Quickshell.env("HOME") || "") + "/Downloads/arch.png"
-    readonly property url source: Qt.resolvedUrl("file://" + path)
+    // readonly property string path: (Quickshell.env("HOME") || "") + "/Downloads/arch.png"
+    // readonly property url source: Qt.resolvedUrl("file://" + path)
 
     Variants {
         model: Quickshell.screens
