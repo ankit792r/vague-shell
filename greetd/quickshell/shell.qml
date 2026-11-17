@@ -18,7 +18,7 @@ ShellRoot {
     readonly property string fontFamily: "Iosevka Nerd Font"
 
     property var sessions: [
-        { file: "niri.desktop", label: "Niri", command: ["niri-session"], desktop: "niri" }
+        { file: "niri.desktop", label: "Niri", command: ["uwsm start -F -- niri-session"], desktop: "niri" }
     ]
     property int sessionIndex: 0
     property bool sessionMenuOpen: false
