@@ -19,7 +19,9 @@ layout {
 }
 
 // Launch Quickshell with your greeter config
-spawn-at-startup "quickshell" "-p" "/etc/greetd/quickshell/shell.qml"
+// greetd waits for this niri to exit before starting the user session, so
+// quit it as soon as the greeter hands off.
+spawn-sh-at-startup "quickshell -p /etc/greetd/quickshell/shell.qml; niri msg action quit --skip-confirmation"
 
 // Disable hotkeys you do not want available on the login screen
 binds {
