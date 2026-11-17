@@ -17,6 +17,7 @@ Item {
     property var order: []
     property var live: ({})
     property var refs: ({})
+    property var closing: ({})
     property int revision: 0
 
     readonly property int lowDuration: 5000
@@ -69,10 +70,11 @@ Item {
 
     function durationFor(urgency, requested) {
         if (urgency === NotificationUrgency.Critical) return 0
-        if (requested === 0) return 0
         var base = urgency === NotificationUrgency.Low ? lowDuration : normalDuration
-        var asked = requested > 0 ? requested : base
-        return Math.min(maxDuration, Math.max(base, asked))
+        // notify-send omits a timeout, which arrives as 0 or -1. Only a
+        // positive request from the app stretches the lifetime.
+        if (!(requested > 0)) return base
+        return Math.min(maxDuration, Math.max(base, requested))
     }
 
     function actionsOf(notification) {
@@ -97,10 +99,13 @@ Item {
 
     property bool receiving: false
 
+    function keyOf(id) { return String(id) }
+
     function receive(notification) {
         if (!notification || receiving) return
+        var id = keyOf(notification.id)
+        if (closing[id]) return
         receiving = true
-        var id = notification.id
         if (!notification.tracked) notification.tracked = true
         var duration = durationFor(notification.urgency, notification.expireTimeout)
         var row = {
@@ -134,26 +139,42 @@ Item {
         receiving = false
     }
 
+    function markClosing(id) {
+        id = keyOf(id)
+        var next = closing
+        next[id] = true
+        closing = next
+        return id
+    }
+
     function remove(id) {
-        if (refs[id]) {
-            try { refs[id].tracked = false } catch (e) {}
-        }
-        delete refs[id]
-        delete live[id]
+        id = markClosing(id)
+        var notification = refs[id]
+        var nextLive = {}
         var next = []
         for (var i = 0; i < order.length; i++) {
-            if (order[i] !== id) next.push(order[i])
+            if (keyOf(order[i]) === id) continue
+            next.push(keyOf(order[i]))
+            nextLive[keyOf(order[i])] = live[keyOf(order[i])]
         }
+        delete refs[id]
+        live = nextLive
         order = next
         touch()
+        // Dropping tracked can deliver the same notification again. closing
+        // makes that delivery a no-op, so dismiss and expire actually stick.
+        if (notification) {
+            try { notification.tracked = false } catch (e) {}
+        }
     }
 
     function dismiss(id) {
+        id = markClosing(id)
         var notification = refs[id]
+        remove(id)
         if (notification) {
             try { notification.dismiss() } catch (e) {}
         }
-        remove(id)
     }
 
     function dismissAll() {
@@ -179,9 +200,10 @@ Item {
         var now = Date.now()
         var ids = order.slice()
         for (var i = 0; i < ids.length; i++) {
-            var row = live[ids[i]]
+            var row = live[keyOf(ids[i])]
             if (!row || row.deadline <= 0 || row.deadline > now) continue
-            var notification = refs[ids[i]]
+            var notification = refs[keyOf(ids[i])]
+            markClosing(ids[i])
             if (notification) {
                 try { notification.expire() } catch (e) {}
             }
@@ -250,6 +272,10 @@ Item {
         function toggleDnd(): string {
             root.setDoNotDisturb(!root.doNotDisturb)
             return root.doNotDisturb ? "on" : "off"
+        }
+        function dismiss(): string {
+            root.dismissAll()
+            return "ok"
         }
         function dismissAll(): string {
             root.dismissAll()
