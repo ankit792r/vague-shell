@@ -275,10 +275,9 @@ Item {
 
             readonly property int deckWidth: 480
 
-            anchors { top: true; left: true; right: true }
+            anchors { top: true; right: true }
             margins.top: Style.bar.height + 8
-            margins.left: Math.max(0, (modelData.width - deckWidth) / 2)
-            margins.right: margins.left
+            margins.right: 8
             implicitWidth: deckWidth
             implicitHeight: deck.implicitHeight
 
