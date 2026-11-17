@@ -3,6 +3,7 @@ import Quickshell
 import "plugins/bar"
 import "plugins/clipboard"
 import "services/idle"
+import "services/notifications"
 import "plugins/launcher"
 import "plugins/lock"
 import "plugins/wallpaper" 
@@ -25,6 +26,7 @@ ShellRoot {
 
     Clipboard {}
     Idle {}
+    Notifications {}
     Launcher {}
     Lock {}
     Wallpaper {}
