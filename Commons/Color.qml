@@ -3,7 +3,7 @@ import QtQuick
 
 // Palette for the shell. Surfaces read these roles instead of hex colors.
 QtObject {
-    readonly property color background: "#1e1e2e"
+    readonly property color background: "#1e2030" //"#1e1e2e" 
     readonly property color surface: "#313244"
     readonly property color border: "#45475a"
     readonly property color text: "#cdd6f4"

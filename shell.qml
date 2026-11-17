@@ -4,6 +4,7 @@ import "plugins/bar"
 import "plugins/clipboard"
 import "plugins/launcher"
 import "plugins/lock"
+import "plugins/wallpaper" 
 
 ShellRoot {
     id: shell
@@ -24,4 +25,5 @@ ShellRoot {
     Clipboard {}
     Launcher {}
     Lock {}
+    Wallpaper {}
 }
