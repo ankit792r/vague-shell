@@ -302,8 +302,8 @@ Item {
             readonly property int deckWidth: 480
 
             anchors { top: true; right: true }
-            margins.top: Style.bar.height + 8
-            margins.right: 8
+            margins.top: Style.bar.height + 4
+            margins.right: 4
             implicitWidth: deckWidth
             implicitHeight: deck.implicitHeight
 

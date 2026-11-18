@@ -27,9 +27,11 @@ Item {
         ]
     })
 
+    readonly property bool hyprland: !!Quickshell.env("HYPRLAND_INSTANCE_SIGNATURE")
+
     // Stand-in for BarWidgetRegistry.widgets[id].component.
     function moduleFor(id) {
-        if (id === "workspace") return workspaceComponent
+        if (id === "workspace") return hyprland ? hyprlandWorkspaceComponent : workspaceComponent
         if (id === "clock") return clockComponent
         if (id === "media") return mediaComponent
         if (id === "volume") return volumeComponent
@@ -45,6 +47,7 @@ Item {
     }
 
     Component { id: workspaceComponent; Workspace {} }
+    Component { id: hyprlandWorkspaceComponent; WorkspaceHyprland {} }
     Component { id: clockComponent; Clock {} }
 
     Component { id: mediaComponent; Media {} }
