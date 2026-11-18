@@ -112,9 +112,10 @@ Item {
         onRightClicked: root.toggleRadio()
     }
 
-    Loader {
-        active: root.opened
+    PopupLoader {
+        open: root.opened
         sourceComponent: PanelPopup {
+            open: root.opened
             anchorItem: row
             panelNamespace: "bluetooth-panel"
             cardWidth: 380

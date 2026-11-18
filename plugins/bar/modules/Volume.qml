@@ -82,9 +82,10 @@ Item {
         onWheeled: function (delta) { root.setVolume(root.level + (delta > 0 ? 0.05 : -0.05)) }
     }
 
-    Loader {
-        active: root.opened
+    PopupLoader {
+        open: root.opened
         sourceComponent: PanelPopup {
+            open: root.opened
             anchorItem: row
             panelNamespace: "volume-panel"
             cardWidth: 380

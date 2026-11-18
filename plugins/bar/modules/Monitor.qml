@@ -117,9 +117,10 @@ Item {
         onWheeled: function (delta) { root.setBrightness(root.brightnessPercent + (delta > 0 ? 5 : -5)) }
     }
 
-    Loader {
-        active: root.opened
+    PopupLoader {
+        open: root.opened
         sourceComponent: PanelPopup {
+            open: root.opened
             anchorItem: row
             panelNamespace: "monitor-panel"
             cardWidth: 380

@@ -180,9 +180,10 @@ Item {
         onClicked: root.opened = !root.opened
     }
 
-    Loader {
-        active: root.opened
+    PopupLoader {
+        open: root.opened
         sourceComponent: PanelPopup {
+            open: root.opened
             anchorItem: row
             panelNamespace: "network-panel"
             cardWidth: 380

@@ -6,6 +6,7 @@ LabeledValue 1.0 LabeledValue.qml
 ListRow 1.0 ListRow.qml
 PanelHero 1.0 PanelHero.qml
 PanelPopup 1.0 PanelPopup.qml
+PopupLoader 1.0 PopupLoader.qml
 SectionLabel 1.0 SectionLabel.qml
 Slider 1.0 Slider.qml
 ToggleSwitch 1.0 ToggleSwitch.qml

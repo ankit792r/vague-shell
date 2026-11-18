@@ -208,9 +208,10 @@ Item {
         onClicked: root.opened = !root.opened
     }
 
-    Loader {
-        active: root.opened
+    PopupLoader {
+        open: root.opened
         sourceComponent: PanelPopup {
+            open: root.opened
             anchorItem: row
             panelNamespace: "system-panel"
             cardWidth: 460

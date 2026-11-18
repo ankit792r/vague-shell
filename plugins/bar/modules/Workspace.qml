@@ -162,7 +162,7 @@ Item {
             width: Math.min(implicitWidth, 280)
             text: root.windowTitle
             color: Commons.Color.subtext
-            size: Style.font.subtitle
+            size: Style.font.heading
             elide: Text.ElideRight
             visible: text !== ""
         }

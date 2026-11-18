@@ -65,9 +65,10 @@ Item {
         onWheeled: function (delta) { if (root.opened) root.moveMonth(delta > 0 ? -1 : 1) }
     }
 
-    Loader {
-        active: root.opened
+    PopupLoader {
+        open: root.opened
         sourceComponent: PanelPopup {
+            open: root.opened
             anchorItem: label
             panelNamespace: "clock-panel"
             cardWidth: 308

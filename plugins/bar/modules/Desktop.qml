@@ -25,9 +25,10 @@ Item {
         onClicked: root.opened = !root.opened
     }
 
-    Loader {
-        active: root.opened
+    PopupLoader {
+        open: root.opened
         sourceComponent: PanelPopup {
+            open: root.opened
             anchorItem: icon
             panelNamespace: "desktop-panel"
             cardWidth: 440

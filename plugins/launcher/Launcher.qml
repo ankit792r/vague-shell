@@ -95,6 +95,7 @@ Item {
 
     CenterOverlay {
         shown: root.opened
+        anchor: "bottom"
         panelNamespace: "launcher"
         cardWidth: 450
         cardHeight: 420

@@ -37,4 +37,12 @@ QtObject {
     readonly property QtObject bar: QtObject {
         readonly property int height: Math.max(32, root.fontBaseSize * 2)
     }
+
+    // Cubic bezier control points for Easing.BezierSpline, ending at (1, 1).
+    readonly property QtObject motion: QtObject {
+        readonly property int enter: 240
+        readonly property int exit: 160
+        readonly property var enterCurve: [0.05, 0.7, 0.1, 1.0, 1, 1]
+        readonly property var exitCurve: [0.3, 0.0, 0.8, 0.15, 1, 1]
+    }
 }
